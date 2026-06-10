@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, session } from '../api.js';
+import { Icon } from '../components/Icon.jsx';
+import { Button } from '../components/Button.jsx';
+import { Input } from '../components/Input.jsx';
+import { Select } from '../components/Select.jsx';
 
 export default function Login({ onAuth }) {
   const [mode, setMode] = useState('login');
@@ -25,36 +29,63 @@ export default function Login({ onAuth }) {
   }
 
   return (
-    <div>
-      <h1>{mode === 'login' ? 'Ingresar' : 'Crear cuenta'}</h1>
-      <form onSubmit={submit}>
-        <label>Usuario</label>
-        <input value={form.username} onChange={set('username')} required />
-        {mode === 'register' && (
-          <>
-            <label>Email</label>
-            <input type="email" value={form.email} onChange={set('email')} required />
-            <label>Rol</label>
-            <select value={form.role} onChange={set('role')}>
-              <option value="buyer">Comprador</option>
-              <option value="seller">Vendedor</option>
-            </select>
-          </>
-        )}
-        <label>Contraseña</label>
-        <input type="password" value={form.password} onChange={set('password')} required />
-        {error && <p className="error">{error}</p>}
-        <div className="row">
-          <button type="submit">{mode === 'login' ? 'Ingresar' : 'Registrarme'}</button>
-          <button type="button" className="secondary"
-            onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
-            {mode === 'login' ? 'No tengo cuenta' : 'Ya tengo cuenta'}
-          </button>
+    <div className="lmk-login" style={{ marginLeft: 'calc(var(--space-6) * -1)', marginRight: 'calc(var(--space-6) * -1)', marginTop: 'calc(var(--space-8) * -1)' }}>
+      <div className="lmk-login__brand">
+        <div className="lmk-login__brand-top">
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', fontWeight: 700, color: 'var(--text-heading)' }}>
+            Loot<span style={{ color: 'var(--green-500)' }}>Market</span>
+          </div>
+          <div className="lmk-login__pitch">
+            <h2>El loot cambia de manos.<br />El dinero queda protegido.</h2>
+            <ul>
+              <li><Icon name="lock" size={16} color="var(--amber-500)" /> Escrow en cada trade</li>
+              <li><Icon name="shield-check" size={16} color="var(--green-500)" /> Reembolso garantizado</li>
+              <li><Icon name="gavel" size={16} color="var(--indigo-400)" /> Disputas con moderación humana</li>
+            </ul>
+          </div>
         </div>
-      </form>
-      <p className="muted" style={{ marginTop: '1rem' }}>
-        Usuarios demo (pass <code>password123</code>): ana_buyer, carla_sells, mod_mati, admin_root
-      </p>
+        <div className="lmk-login__crate">
+          <Icon name="package" size={200} strokeWidth={1} />
+        </div>
+      </div>
+
+      <div className="lmk-login__panel">
+        <form className="lmk-login__form" onSubmit={submit}>
+          <h1>{mode === 'login' ? 'Entrá a tu cuenta' : 'Crear cuenta'}</h1>
+          <p>{mode === 'login' ? 'Comprá y vendé items con protección de escrow.' : 'Unite al mercado peer-to-peer más seguro.'}</p>
+
+          <Input label="Usuario" icon="user" placeholder="ana_buyer" value={form.username} onChange={set('username')} required />
+
+          {mode === 'register' && (
+            <>
+              <Input label="Email" icon="mail" type="email" placeholder="ana@mail.com" value={form.email} onChange={set('email')} required />
+              <Select label="Rol" value={form.role} onChange={set('role')}>
+                <option value="buyer">Comprador</option>
+                <option value="seller">Vendedor</option>
+              </Select>
+            </>
+          )}
+
+          <Input label="Contraseña" icon="lock" type="password" placeholder="••••••••" value={form.password} onChange={set('password')} required />
+
+          {error && <div className="lmk-msg-err"><Icon name="alert-circle" size={16} />{error}</div>}
+
+          <Button type="submit" variant="primary" size="lg" block>
+            {mode === 'login' ? 'Iniciar sesión' : 'Registrarme'}
+          </Button>
+
+          <div className="lmk-login__foot">
+            {mode === 'login' ? '¿No tenés cuenta? ' : '¿Ya tenés cuenta? '}
+            <a href="#" onClick={(e) => { e.preventDefault(); setMode(mode === 'login' ? 'register' : 'login'); }}>
+              {mode === 'login' ? 'Registrate gratis' : 'Iniciá sesión'}
+            </a>
+          </div>
+
+          <div style={{ padding: 'var(--space-3)', background: 'var(--surface-overlay)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            Demo — pass <strong style={{ color: 'var(--text-secondary)' }}>password123</strong>: ana_buyer · carla_sells · mod_mati · admin_root
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

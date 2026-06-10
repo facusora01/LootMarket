@@ -1,0 +1,86 @@
+:root {
+  --ink-950: #0a0c12;
+  --ink-900: #0f1117;
+  --ink-850: #131620;
+  --ink-800: #181b25;
+  --ink-750: #1e2230;
+  --ink-700: #232838;
+  --ink-600: #2a2f3e;
+  --ink-500: #3a4154;
+  --ink-400: #565d72;
+
+  --cloud-50:  #f4f6fb;
+  --cloud-100: #e6e9f2;
+  --cloud-300: #c4cbd9;
+  --cloud-400: #9aa3b5;
+  --cloud-500: #6b7384;
+
+  --indigo-300: #91a7ff;
+  --indigo-400: #748ffc;
+  --indigo-500: #5c7cfa;
+  --indigo-600: #4c6ef5;
+  --indigo-700: #3b5bdb;
+  --indigo-800: #364fc7;
+  --indigo-link: #7aa2ff;
+
+  --green-300: #8ce99a;
+  --green-400: #69db7c;
+  --green-500: #6fdc8c;
+  --green-600: #40c057;
+  --green-700: #2f9e44;
+  --green-ink: #1d3b2a;
+
+  --amber-400: #ffc972;
+  --amber-500: #f0b46a;
+  --amber-600: #f59f00;
+  --amber-ink: #3b2a1d;
+
+  --red-400: #ef8585;
+  --red-500: #fa5252;
+  --red-600: #e03131;
+  --red-ink: #3b1d1d;
+
+  --rarity-common:    #9aa3b5;
+  --rarity-uncommon:  #69db7c;
+  --rarity-rare:      #4c9aff;
+  --rarity-epic:      #b197fc;
+  --rarity-legendary: #ffd43b;
+
+  --surface-page:    var(--ink-900);
+  --surface-card:    var(--ink-800);
+  --surface-raised:  var(--ink-750);
+  --surface-overlay: var(--ink-700);
+  --surface-inset:   var(--ink-900);
+  --surface-sunken:  var(--ink-950);
+
+  --border-subtle:   var(--ink-600);
+  --border-default:  var(--ink-600);
+  --border-strong:   var(--ink-500);
+  --border-focus:    var(--indigo-500);
+
+  --text-heading:    var(--cloud-50);
+  --text-body:       var(--cloud-100);
+  --text-secondary:  var(--cloud-300);
+  --text-muted:      var(--cloud-400);
+  --text-faint:      var(--cloud-500);
+  --text-link:       var(--indigo-link);
+  --text-on-primary: #ffffff;
+
+  --primary:         var(--indigo-700);
+  --primary-hover:   var(--indigo-600);
+  --primary-active:  var(--indigo-800);
+  --primary-soft:    color-mix(in srgb, var(--indigo-700) 18%, transparent);
+
+  --price:           var(--green-500);
+
+  --status-ok-fg:     var(--green-500);
+  --status-ok-bg:     var(--green-ink);
+  --status-warn-fg:   var(--amber-500);
+  --status-warn-bg:   var(--amber-ink);
+  --status-danger-fg: var(--red-400);
+  --status-danger-bg: var(--red-ink);
+  --status-neutral-fg: var(--cloud-300);
+  --status-neutral-bg: var(--ink-700);
+
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--indigo-500) 45%, transparent);
+}
