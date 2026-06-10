@@ -1,0 +1,5 @@
+
+> lootmarket-server@1.0.0 dev
+> node --watch src/index.js
+
+LootMarket API en http://localhost:3001

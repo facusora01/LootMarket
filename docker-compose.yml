@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16
+    container_name: lootmarket-db
+    environment:
+      POSTGRES_DB: lootmarket
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_admin_change_me
+    ports:
+      # TP6 hardening: bind solo a loopback — equivalente a listen_addresses restringido,
+      # la DB no queda expuesta fuera del host.
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - pgdata:/var/lib/postgresql/data
+    # TP6: la imagen oficial corre el motor como usuario "postgres", nunca root (PoLP)
+
+volumes:
+  pgdata:

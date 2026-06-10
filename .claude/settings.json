@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($r = Invoke-RestMethod http://localhost:3001/api/listings; \"API: $\\($r.Count\\) listings\"; $w = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing; \"Cliente: HTTP $\\($w.StatusCode\\)\"; \"PIDs: $\\(\\(Get-Content 'c:\\\\Users\\\\FacuS\\\\OneDrive\\\\Escritorio\\\\Sora\\\\Facultad\\\\BDD\\\\LootMarket\\\\.pids'\\) -join ', '\\)\")",
+      "PowerShell(cd c:\\\\Users\\\\FacuS\\\\OneDrive\\\\Escritorio\\\\Sora\\\\Facultad\\\\BDD\\\\LootMarket; powershell -ExecutionPolicy Bypass -File \"stop.ps1\"; Start-Sleep -Seconds 2; $api = Get-NetTCPConnection -LocalPort 3001 -State Listen -ErrorAction SilentlyContinue; $web = Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue; \"3001 libre: $\\($null -eq $api\\) / 5173 libre: $\\($null -eq $web\\)\")",
+      "PowerShell(cd c:\\\\Users\\\\FacuS\\\\OneDrive\\\\Escritorio\\\\Sora\\\\Facultad\\\\BDD\\\\LootMarket; powershell -ExecutionPolicy Bypass -File \"start.ps1\")",
+      "Read(//c/Users/FacuS/AppData/Local/Temp/claude/c--Users-FacuS-OneDrive-Escritorio-Sora-Facultad-BDD-LootMarket/df2a9ca1-a42b-411f-8ac5-4d7ad2ce6f3e/tasks/**)",
+      "WebSearch"
+    ]
+  }
+}
