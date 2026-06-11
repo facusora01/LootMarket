@@ -2,3 +2,7 @@ node_modules/
 dist/
 .env
 *.pdf.txt
+.logs
+
+# Config MCP local (cuenta propia, no versionar)
+.mcp.json

@@ -12,7 +12,7 @@ const CATEGORIES = {
 };
 
 export function ListingCard({
-  title, description, category = 'item', rarity, price, currency = '$',
+  title, description, category = 'item', rarity, price, currency = '$', imageUrl,
   sellerName, sellerMasked, sellerAvatar, buyable = true, onBuy, className = '', ...rest
 }) {
   const cat = CATEGORIES[category] || CATEGORIES.item;
@@ -27,7 +27,17 @@ export function ListingCard({
         <span className="lm-listing__cat">
           <span className="lm-tag"><Icon name={cat.icon} size={13} />{cat.label}</span>
         </span>
-        <span className="lm-listing__thumb-icon"><Icon name={cat.icon} size={56} strokeWidth={1.5} /></span>
+        {imageUrl ? (
+          <img
+            className="lm-listing__img"
+            src={imageUrl}
+            alt={title}
+            loading="lazy"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          />
+        ) : (
+          <span className="lm-listing__thumb-icon"><Icon name={cat.icon} size={56} strokeWidth={1.5} /></span>
+        )}
         <span className="lm-listing__rarity-bar" />
       </div>
       <div className="lm-listing__body">

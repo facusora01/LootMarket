@@ -1,0 +1,944 @@
+{
+  "sellers": [
+    {
+      "username": "skinbaron_cs",
+      "email": "skinbaron@gmail.com"
+    },
+    {
+      "username": "wow_legacy",
+      "email": "wowlegacy@yahoo.com"
+    },
+    {
+      "username": "steamkeys_ar",
+      "email": "steamkeys@hotmail.com"
+    },
+    {
+      "username": "riftrader",
+      "email": "riftrader@gmail.com"
+    },
+    {
+      "username": "midlane_god",
+      "email": "midlane@proton.me"
+    }
+  ],
+  "listings": [
+    {
+      "title": "Cuenta Warframe",
+      "category": "account",
+      "game": "Warframe",
+      "description": "MR30 · primed mods · rivens god-roll · email original incluido.",
+      "price": 93.74,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/230410/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key The Witcher 3: Wild Hunt (Steam Global)",
+      "category": "key",
+      "game": "The Witcher 3: Wild Hunt",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 25.39,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Cuenta League of Legends Oro — main Lux",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Oro · +120 campeones · skins de Lux.",
+      "price": 63.91,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Lux.png",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Quel'Serrar",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Ashbringer · entrega in-game por correo.",
+      "price": 121.22,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_sword_36.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Cuenta Sea of Thieves",
+      "category": "account",
+      "game": "Sea of Thieves",
+      "description": "Pirate Legend · cosmeticos raros · email original incluido.",
+      "price": 277.94,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172620/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Cuenta League of Legends Master — main Zed",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Master · +120 campeones · skins de Zed.",
+      "price": 54.34,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Zed.png",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "AWP | Asiimov (Minimal Wear)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.284 · tradeable ya · sticker-free.",
+      "price": 343.63,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_jdk7uW-V6V-Kf2cGFidxOp_pewnF3nhxEt0sGnSzN76dH3GOg9xC8FyEORftRe-x9PuYurq71bW3d8UnjK-0H0YSTpMGQ",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Cuenta League of Legends Diamante — main Ahri",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Diamante · +120 campeones · skins de Ahri.",
+      "price": 138.93,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Ahri.png",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "★ Specialist Gloves | Crimson Kimono (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.431 · tradeable ya · sticker-free.",
+      "price": 29.38,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Tk71ruQBH4jYLf-i5U-fe9V7d9JfOaD2uZ0vpJu-hkQCe8qhkusjCKlIvqHjnCOml8U8UoAfkItBLswdbuNbjr5FHdjNkUzSv73C1K5y46tu4EUvAg-6bU3FrBMOE4_9BdcyhkRns5",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "M4A1-S | Printstream (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.058 · tradeable ya · sticker-free.",
+      "price": 44.44,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8ypexwjFS4_ega6F_H_OGMWrEwL9lj_F7Rienhgk1tjyIpYPwJiPTcAAoCpsiEO5ZsUbpm9C2Zuni4VHW3o5EzSX62HxP7Sg96-hWVqYi_6TJz1aW0nxrkGs",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta Path of Exile",
+      "category": "account",
+      "game": "Path of Exile",
+      "description": "stash premium · personajes endgame · email original incluido.",
+      "price": 192.64,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/238960/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Key Armored Core VI (Steam Global)",
+      "category": "key",
+      "game": "Armored Core VI",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 27.22,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1888160/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Glock-18 | Water Elemental (Battle-Scarred)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.053 · tradeable ya · sticker-free.",
+      "price": 17.06,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL2kpnj9h1Y-s2pZKtuK72fB3aFxP11te99cCW6khUz_TjVyompc3-QOFR2DJQkFOMJtBbqk9LlY-7n5QLZjtkTxCWqhixPv311o7FVIf8eASQ",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Key Mortal Kombat 1 (Steam Global)",
+      "category": "key",
+      "game": "Mortal Kombat 1",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 29.45,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1971870/header.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Filovil Corrupto",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Sulfuras · entrega in-game por correo.",
+      "price": 85.81,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_sword_66.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Elden Ring (Steam Global)",
+      "category": "key",
+      "game": "Elden Ring",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 21.52,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Street Fighter 6 (Steam Global)",
+      "category": "key",
+      "game": "Street Fighter 6",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 12.95,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1364780/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "M4A4 | Asiimov (Battle-Scarred)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.093 · tradeable ya · sticker-free.",
+      "price": 218.7,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8ypexwiFO0P_6V6V-Kf2cGFidxOp_pewnTii3w0x_tmTRnt2qdHyWaFAjA5UlQOYI5BO5k9bhZunm41OI34NDnjK-0H3pAWw_Rw",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Key Sekiro: Shadows Die Twice (Steam Global)",
+      "category": "key",
+      "game": "Sekiro: Shadows Die Twice",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 33.68,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Key Hades (Steam Global)",
+      "category": "key",
+      "game": "Hades",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 19.08,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "M4A4 | Howl (Minimal Wear)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.046 · tradeable ya · sticker-free.",
+      "price": 4370.36,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8ypexwiFO0P_6afVSKP-EAm6extF6ueZhW2exwkl2tmTXwt39eCiUPQR2DMN4TOVetUK8xoLgM-K341eM2otDnC6okGoXufBz_TAB",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Key Palworld (Steam Global)",
+      "category": "key",
+      "game": "Palworld",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 21.36,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Sulfuras, Mano de Ragnaros",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Faerlina · entrega in-game por correo.",
+      "price": 108.36,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_hammer_unique_sulfuras.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Cuenta Rust",
+      "category": "account",
+      "game": "Rust",
+      "description": "horas altas · skins de workshop · email original incluido.",
+      "price": 74.69,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Key Valheim (Steam Global)",
+      "category": "key",
+      "game": "Valheim",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 29.93,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/892970/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "AWP | Lightning Strike (Factory New)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.027 · tradeable ya · sticker-free.",
+      "price": 62.54,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_C9k4_upYLBjKf6UMWaH0dF6ueZhW2frwU1_sW2EmNyvc32RZwMpCpcjQ-EJ4xbtmt3gYezk4wzb3tpAy3mrkGoXubsGIfVN",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Key Starfield (Steam Global)",
+      "category": "key",
+      "game": "Starfield",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 29.75,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1716740/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "M4A1-S | Hyper Beast (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.044 · tradeable ya · sticker-free.",
+      "price": 25.6,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL8ypexwjFS4_ega6F_H_OGMWrEwL9JuPh5SjuMlxgmoCm6lob-KT-JbwF1WZEjR-YJskK9k9XiYePltAeNjYlAxSn5j34dvCZstb4LB6Ut-7qX0V8Xkv5_2A",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Glock-18 | Fade (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.236 · tradeable ya · sticker-free.",
+      "price": 445.4,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL2kpnj9h1a7s2oaaBoH_yaCW-Ej-8u5bZvHnq1w0Vz62TUzNj4eCiVblMmXMAkROJeskLpkdXjMrzksVTAy9US8PY25So",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Corcel Mortal Rabioso",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Montura · realm Tichondrius · entrega in-game por correo.",
+      "price": 299.56,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_misc_horn_02.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "AK-47 | Asiimov (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.188 · tradeable ya · sticker-free.",
+      "price": 41.4,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiFO0POlPPNSIeOaB2qf19F6ueZhW2e2wEt-t2jcytf6dymSO1JxA5oiRecLsRa5kIfkYr-241aLgotHz3-rkGoXuUp8oX57",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "SSG 08 | Blood in the Water (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.036 · tradeable ya · sticker-free.",
+      "price": 158.14,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLijZGwpR1Y-s29YKV_K8-fB2CY1aAmsbFtFnDilkUl5j7UzoqsInmVaFd0XMMlELYDshbuxNPvP-yxtlCMlcsbmlWiixNl",
+      "seller": "riftrader"
+    },
+    {
+      "title": "AWP | Neo-Noir (Minimal Wear)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.243 · tradeable ya · sticker-free.",
+      "price": 300.04,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_jdk7uW-V6poL_6cB3WvzedxuPUnHirrxR4l423SyI39I3KXPwdxWZclQeNZ5EXskYfnNeyw71OMi9lNzDK-0H3r66pOTw",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Gorehowl, Hacha de Grommash",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · TBC · realm Nethergarde · entrega in-game por correo.",
+      "price": 33.17,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_axe_09.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Sulfuron, Martillo Llameante",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Earthfury · entrega in-game por correo.",
+      "price": 54.18,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_mace_10.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Cuenta Dark Souls III",
+      "category": "account",
+      "game": "Dark Souls III",
+      "description": "SL120 meta · todos los anillos +3 · email original incluido.",
+      "price": 222.59,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/374320/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Cuenta Phasmophobia",
+      "category": "account",
+      "game": "Phasmophobia",
+      "description": "nivel prestigio · todo desbloqueado · email original incluido.",
+      "price": 822.05,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/739630/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Sons of the Forest (Steam Global)",
+      "category": "key",
+      "game": "Sons of the Forest",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 18.17,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta PUBG: Battlegrounds",
+      "category": "account",
+      "game": "PUBG: Battlegrounds",
+      "description": "survival mastery alto · skins raras de set · email original incluido.",
+      "price": 368.93,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Cuenta League of Legends Platino — main LeeSin",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Platino · +120 campeones · skins de LeeSin.",
+      "price": 40.21,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/LeeSin.png",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Cercenadora, Gran Hacha del Rey Exanime",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · WotLK · realm Mankrik · entrega in-game por correo.",
+      "price": 310.09,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_axe_113.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Cuenta Hunt: Showdown",
+      "category": "account",
+      "game": "Hunt: Showdown",
+      "description": "prestigio alto · legendary hunters · email original incluido.",
+      "price": 73.15,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/594650/header.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Key Hogwarts Legacy (Steam Global)",
+      "category": "key",
+      "game": "Hogwarts Legacy",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 34.52,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/990080/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Tekken 8 (Steam Global)",
+      "category": "key",
+      "game": "Tekken 8",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 48.39,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Cuenta Team Fortress 2",
+      "category": "account",
+      "game": "Team Fortress 2",
+      "description": "backpack con unusuals · 12 anios de servicio · email original incluido.",
+      "price": 116.11,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/440/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Key Cyberpunk 2077 (Steam Global)",
+      "category": "key",
+      "game": "Cyberpunk 2077",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 35.36,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Tabardo del Protector",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Cosmetico · realm Area-52 · entrega in-game por correo.",
+      "price": 35.5,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_shirt_guildtabard_01.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Cuenta GTA Online (GTA V)",
+      "category": "account",
+      "game": "GTA Online (GTA V)",
+      "description": "rank 250 · $80M en banco · todas las propiedades · email original incluido.",
+      "price": 192.38,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Invencible (montura)",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · WotLK drop raro · realm Illidan · entrega in-game por correo.",
+      "price": 698.67,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/ability_mount_ridinghorse.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "AK-47 | Case Hardened (Factory New)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.378 · tradeable ya · sticker-free.",
+      "price": 652.8,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiNK0P2nZKFpH_yaCW-Ej7sk5bE8Sn-2lEpz4zndzoyvdHuUPwFzWZYiE7EK4Bi4k9TlY-y24FbAy9USGSiZd5Q",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Monster Hunter: World (Steam Global)",
+      "category": "key",
+      "game": "Monster Hunter: World",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 18.49,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "AK-47 | Vulcan (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.027 · tradeable ya · sticker-free.",
+      "price": 287.44,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiFO0POlPPNSMuWRDGKC_uJ_t-l9AXCxxEh14zjTztivci2ePQZ2W8NzTecD4BKwloLiYeqxtAOIj9gUyyngznQeF7I6QE8",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Key Red Dead Redemption 2 (Steam Global)",
+      "category": "key",
+      "game": "Red Dead Redemption 2",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 19.24,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "AK-47 | Redline (Factory New)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.37 · tradeable ya · sticker-free.",
+      "price": 24.51,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiFO0POlPPNSI_-RHGavzedxuPUnFniykEtzsWWBzoyuIiifaAchDZUjTOZe4RC_w4buM-6z7wzbgokUyzK-0H08hRGDMA",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Val'anyr, Martillo de los Reyes Antiguos",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · WotLK · realm Grobbulus · entrega in-game por correo.",
+      "price": 989.51,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_mace_127.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "★ Sport Gloves | Vice (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.318 · tradeable ya · sticker-free.",
+      "price": 89.27,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Tk5UvzWCL2kpn2-DFk_OKherB0H_KfG2Kv0ed4u95lRi67gVNx4T-Bw434IHyVb1QlAsd1FOUDthG4xNznMu3m4QXXg90Wzn_33C1I8G81tLaDi_rK",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Atiesh, Gran Baculo del Guardian",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Whitemane · entrega in-game por correo.",
+      "price": 898.31,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_staff_medivh.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "AWP | Medusa (Battle-Scarred)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.263 · tradeable ya · sticker-free.",
+      "price": 2563.99,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_jdk4veqfbdsH_GEHlicyOl-pK85TC23wk12tWSGnNr6JXqRPVUnA5J5RLIKshS-l4HuYbji7lfajdgU02yg2bOcOBD3",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Baldur's Gate 3 (Steam Global)",
+      "category": "key",
+      "game": "Baldur's Gate 3",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 37.22,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta Dota 2",
+      "category": "account",
+      "game": "Dota 2",
+      "description": "MMR 5400 · Immortal · inventario con Arcanas · email original incluido.",
+      "price": 66.18,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "★ Karambit | Fade (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.19 · tradeable ya · sticker-free.",
+      "price": 26.71,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL6kJ_m-B1Q7uCvZaZkNM-SD1iWwOpzj-1gSCGn20tztm_UyIn_JHKUbgYlWMcmQ-ZcskSwldS0MOnntAfd3YlMzH35jntXrnE8SOGRGG8",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Desert Eagle | Blaze (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.21 · tradeable ya · sticker-free.",
+      "price": 156.73,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL1m5fn8Sdk7vORbqhsLfWAMWuZxuZi_uI_TX6wxxkjsGXXnImsJ37COlUoWcByEOMOtxa5kdXmNu3htVPZjN1bjXKpkHLRfQU",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Cuenta Terraria",
+      "category": "account",
+      "game": "Terraria",
+      "description": "personajes master mode · items raros · email original incluido.",
+      "price": 97.12,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Cuenta Destiny 2",
+      "category": "account",
+      "game": "Destiny 2",
+      "description": "todas las dungeons · Day-One Raid seal · email original incluido.",
+      "price": 389.46,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1085660/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Desert Eagle | Printstream (Minimal Wear)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.357 · tradeable ya · sticker-free.",
+      "price": 41.31,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL1m5fn8Sdk7OeRbKFsJ8-DHG6e1f1iouRoQha_nBovp3OGmdeqInyVP1V0XsYlRbEI50a5wNyzZr605AyI3t5MmCSohylAuC89_a9cBoMY9UkV",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key EA SPORTS FC 24 (Steam Global)",
+      "category": "key",
+      "game": "EA SPORTS FC 24",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 34.76,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/2195250/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta Rainbow Six Siege",
+      "category": "account",
+      "game": "Rainbow Six Siege",
+      "description": "Diamante · operadores y skins black ice · email original incluido.",
+      "price": 119.47,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Cuenta Stardew Valley",
+      "category": "account",
+      "game": "Stardew Valley",
+      "description": "granja perfeccion 100% · multiplayer · email original incluido.",
+      "price": 195.55,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Cuenta Deep Rock Galactic",
+      "category": "account",
+      "game": "Deep Rock Galactic",
+      "description": "todas las clases promo · overclocks · email original incluido.",
+      "price": 104.37,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/548430/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "USP-S | Kill Confirmed (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.274 · tradeable ya · sticker-free.",
+      "price": 23.15,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLkjYbf7itX6vytbbZSI-WsG3SA_uV_vO1WTCa9kxQ1vjiBpYPwJiPTcFB2Xpp5TO5cskG9lYCxZu_jsVCL3o4Xnij23ClO5ik9tegFA_It8qHJz1aWe-uc160",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Key Black Myth: Wukong (Steam Global)",
+      "category": "key",
+      "game": "Black Myth: Wukong",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 12.05,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "★ Butterfly Knife | Crimson Web (Battle-Scarred)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.355 · tradeable ya · sticker-free.",
+      "price": 82.86,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL6kJ_m-B1Z-ua6bbZrLOmsBn6v1ut0o95lRi67gVN04WmDzNz_cX_CalAiW8FxR7MI4xKxmtPlYe7ksgzeiN5BziT83y4f8G81tOxPsLb-",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "P250 | Asiimov (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.128 · tradeable ya · sticker-free.",
+      "price": 131.42,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLhzMOwwiFO0OL8PfRSIeOaB2qf19F6ueZhW2fixx53tWqEm4ugeXuebQN0CZJyRrMJuxm4loCyPr_i51TfjtgXzi79kGoXuUXmUJzm",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta Apex Legends",
+      "category": "account",
+      "game": "Apex Legends",
+      "description": "Predator S17 · heirloom de Wraith · email original incluido.",
+      "price": 801.07,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "AWP | Dragon Lore (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.427 · tradeable ya · sticker-free.",
+      "price": 9910.45,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_jdk4veqYaF7IfysCnWRxuF4j-B-Xxa_nBovp3Pdwtj9cC_GaAd0DZdwQu9fuhS4kNy0NePntVTbjYpCyyT_3CgY5i9j_a9cBkcCWUKV",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Five-SeveN | Hyper Beast (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.01 · tradeable ya · sticker-free.",
+      "price": 156.51,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL3l4Dl7idN6vyRa7FSJvmFC3SV1-t4j-lwXyyhlxgmoCm6lob-KT-JO1QgWZVyELEPu0W4l9KzYbzn5Fbf3YkTzn_8hihIvXxtsOoFUKYirLqX0V_f6-eqCw",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Key Resident Evil 4 Remake (Steam Global)",
+      "category": "key",
+      "game": "Resident Evil 4 Remake",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 29.52,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "AK-47 | Fire Serpent (Factory New)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.409 · tradeable ya · sticker-free.",
+      "price": 1271.55,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwlcK3wiFO0PSneqF-JeKDC2mE_u995LZWTTuygxIYvzSCkpu3cnvFPQB2DpUkROFY4Rntw93lP7i241DbiI1BxSuviHlKunk_6-sHU71lpPMTRLyP4Q",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Hollow Knight (Steam Global)",
+      "category": "key",
+      "game": "Hollow Knight",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 25.78,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Disco Elysium (Steam Global)",
+      "category": "key",
+      "game": "Disco Elysium",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 28.25,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/632470/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "★ M9 Bayonet | Marble Fade (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.267 · tradeable ya · sticker-free.",
+      "price": 333.35,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL6kJ_m-B1Wts2sab1iLvWHMWad_uN3ouNlSha1lBkijDGMnYftb3OTbVRyD8Z1RrNctkS6kobkZLzi7gTW2NpFxH33hi9Nuno65uxXAqs7uvqA7lyFHH4",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Key It Takes Two (Steam Global)",
+      "category": "key",
+      "game": "It Takes Two",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 46.09,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1426210/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Cuenta Football Manager 2024",
+      "category": "account",
+      "game": "Football Manager 2024",
+      "description": "saves de varias ligas · editor · email original incluido.",
+      "price": 41.86,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/2252570/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Cuenta League of Legends Diamante — main Jinx",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Diamante · +120 campeones · skins de Jinx.",
+      "price": 59.21,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Jinx.png",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Cuenta Cities: Skylines II",
+      "category": "account",
+      "game": "Cities: Skylines II",
+      "description": "mapas custom · todo el contenido · email original incluido.",
+      "price": 382.07,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/949230/header.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Cuphead (Steam Global)",
+      "category": "key",
+      "game": "Cuphead",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 35.63,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/268910/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Lies of P (Steam Global)",
+      "category": "key",
+      "game": "Lies of P",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 33.36,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1627720/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Cuenta Dead by Daylight",
+      "category": "account",
+      "game": "Dead by Daylight",
+      "description": "prestigio 100 varios killers · DLC completo · email original incluido.",
+      "price": 75.74,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/381210/header.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Key Helldivers 2 (Steam Global)",
+      "category": "key",
+      "game": "Helldivers 2",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 29.55,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/553850/header.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Pico de Felmano (Felstriker)",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Skeram · entrega in-game por correo.",
+      "price": 32.4,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_sword_48.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "AWP | Gungnir (Factory New)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.25 · tradeable ya · sticker-free.",
+      "price": 10600.85,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf-jFk7uW-V6N4LvedB3WvzedxuPUnHnjnzUl0sWrdztitI3rDZgJzAsZ1QOFY4UPqldDgMO_l41HXit9AmTK-0H227dAsvQ",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "★ Karambit | Doppler (Well-Worn)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.074 · tradeable ya · sticker-free.",
+      "price": 79.34,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyL6kJ_m-B1Q7uCvZaZkNM-SA1iSze91u_FsTju_qhAmoT-Jn4bjJC_4Ml93UtZuRLQPsBawkNfiMbnl5AKMiopCnin7iCJBv31j4rkBBKEg-6zUjV3GY6p9v8dpLWT3Fg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Stardew Valley (Steam Global)",
+      "category": "key",
+      "game": "Stardew Valley",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 50.64,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Key Forza Horizon 5 (Steam Global)",
+      "category": "key",
+      "game": "Forza Horizon 5",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 22.79,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "Glaivelunas Calladas (par)",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · TBC · realm Benediction · entrega in-game por correo.",
+      "price": 144.16,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_weapon_glave_01.jpg",
+      "seller": "riftrader"
+    },
+    {
+      "title": "Filo de la Luz (Ashbringer)",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Legion · realm Stormrage · entrega in-game por correo.",
+      "price": 476.36,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_sword_2h_artifactashbringer_d_01.jpg",
+      "seller": "midlane_god"
+    },
+    {
+      "title": "Key Remnant II (Steam Global)",
+      "category": "key",
+      "game": "Remnant II",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 39.45,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/1282100/header.jpg",
+      "seller": "carla_sells"
+    },
+    {
+      "title": "Cuenta League of Legends Master — main Yasuo",
+      "category": "account",
+      "game": "League of Legends",
+      "description": "LoL EUW/LAS · Master · +120 campeones · skins de Yasuo.",
+      "price": 42.39,
+      "image_url": "https://ddragon.leagueoflegends.com/cdn/14.1.1/img/champion/Yasuo.png",
+      "seller": "dario_sells"
+    },
+    {
+      "title": "Thunderfury, Bendicion de los Vientos Furiosos",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Pagle · entrega in-game por correo.",
+      "price": 76.64,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_sword_39.jpg",
+      "seller": "skinbaron_cs"
+    },
+    {
+      "title": "Key Subnautica (Steam Global)",
+      "category": "key",
+      "game": "Subnautica",
+      "description": "Clave Steam global · entrega instantanea · activacion region-free.",
+      "price": 20.16,
+      "image_url": "https://cdn.cloudflare.steamstatic.com/steam/apps/264710/header.jpg",
+      "seller": "wow_legacy"
+    },
+    {
+      "title": "Benediccion / Anatema",
+      "category": "item",
+      "game": "World of Warcraft",
+      "description": "WoW · Vanilla · realm Pagle · entrega in-game por correo.",
+      "price": 796.29,
+      "image_url": "https://wow.zamimg.com/images/wow/icons/large/inv_staff_30.jpg",
+      "seller": "steamkeys_ar"
+    },
+    {
+      "title": "AWP | Hyper Beast (Field-Tested)",
+      "category": "skin",
+      "game": "Counter-Strike 2",
+      "description": "CS2 · float 0.398 · tradeable ya · sticker-free.",
+      "price": 130.81,
+      "image_url": "https://community.akamai.steamstatic.com/economy/image/i0CoZ81Ui0m-9KwlBY1L_18myuGuq1wfhWSaZgMttyVfPaERSR0Wqmu7LAocGIGz3UqlXOLrxM-vMGmW8VNxu5Dx60noTyLwiYbf_jdk7uW-V6x0MPWBMWWVwP1ij-1gSCGn20pxtm_WzNuoeHKeaFAnCZUiTe5bt0HqxofmZOrm5Q2IjoMQzS_5iShXrnE8NzWs__c",
+      "seller": "riftrader"
+    }
+  ]
+}

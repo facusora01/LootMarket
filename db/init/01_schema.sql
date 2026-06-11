@@ -34,6 +34,7 @@ CREATE TABLE listings (
     category    listing_category NOT NULL,
     description TEXT NOT NULL DEFAULT '',
     price       NUMERIC(12,2) NOT NULL CHECK (price > 0),
+    image_url   TEXT,
     status      listing_status NOT NULL DEFAULT 'active',
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()

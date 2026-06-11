@@ -14,7 +14,8 @@ CREATE OR REPLACE VIEW v_listings_public AS
 SELECT l.id, l.title, l.category, l.description, l.price, l.status,
        l.created_at, l.updated_at,
        u.username AS seller_username,
-       mask_email(u.email) AS seller_email_masked
+       mask_email(u.email) AS seller_email_masked,
+       l.image_url
 FROM listings l
 JOIN users u ON u.id = l.seller_id;
 
