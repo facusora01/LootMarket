@@ -1,23 +1,47 @@
 # LootMarket - arranque completo (DB + API + cliente), sin ventanas extra.
 # API y cliente corren ocultos; esta consola muestra sus logs en tiempo real.
-# Ctrl+C corta la vista de logs (los servicios siguen). Frenar todo: .\stop.ps1
-# .\start.ps1 -NoLogs  -> arranca y termina sin quedarse mostrando logs
+# Ctrl+C frena TODO (API, cliente y DB) y cierra limpio. No hace falta stop.ps1.
+# Si ya hay una instancia corriendo, .\start.ps1 la reinicia.
+# .\start.ps1 -NoLogs  -> arranca en segundo plano y termina sin mostrar logs
 param([switch]$NoLogs)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 
+# Frena procesos (API + cliente por PID y por puerto) y, opcional, la DB.
+function Stop-LootMarket {
+    param([switch]$IncludeDb)
+
+    if (Test-Path "$root\.pids") {
+        foreach ($procId in Get-Content "$root\.pids") {
+            if ($procId -match '^\d+$') {
+                # /T mata el arbol completo (cmd -> npm -> node/vite)
+                taskkill /PID $procId /T /F *> $null
+            }
+        }
+        Remove-Item "$root\.pids" -Force -ErrorAction SilentlyContinue
+    }
+
+    # Por las dudas: liberar puertos si quedaron procesos huerfanos.
+    $conns = Get-NetTCPConnection -LocalPort 3001, 5173 -State Listen -ErrorAction SilentlyContinue
+    foreach ($c in $conns) {
+        taskkill /PID $c.OwningProcess /T /F *> $null
+    }
+
+    if ($IncludeDb) {
+        Set-Location $root
+        docker compose down *> $null
+    }
+}
+
 Write-Host "==> LootMarket" -ForegroundColor Cyan
 
-# 0. Ya hay algo corriendo?
-if (Test-Path "$root\.pids") {
-    Write-Host "Existe .pids - parece que ya esta corriendo. Ejecuta .\stop.ps1 primero." -ForegroundColor Yellow
-    exit 1
-}
-$busy = Get-NetTCPConnection -LocalPort 3001, 5173 -State Listen -ErrorAction SilentlyContinue
-if ($busy) {
-    $ports = ($busy | Select-Object -ExpandProperty LocalPort -Unique) -join ', '
-    Write-Host "Puerto(s) $ports ya en uso. Frenar lo que este corriendo (.\stop.ps1) y reintentar." -ForegroundColor Yellow
-    exit 1
+# 0. Ya hay algo corriendo? -> reiniciar (cerrar lo anterior y seguir).
+$running = (Test-Path "$root\.pids") -or `
+    (Get-NetTCPConnection -LocalPort 3001, 5173 -State Listen -ErrorAction SilentlyContinue)
+if ($running) {
+    Write-Host "Ya habia una instancia corriendo. Reiniciando..." -ForegroundColor Yellow
+    Stop-LootMarket
+    Start-Sleep -Seconds 1
 }
 
 # 1. Docker engine listo?
@@ -58,7 +82,7 @@ if (-not (Test-Path "$root\client\node_modules")) {
     Push-Location "$root\client"; npm install; Pop-Location
 }
 
-# 4. API y cliente ocultos, logs a archivo, PIDs guardados para stop.ps1
+# 4. API y cliente ocultos, logs a archivo, PIDs guardados.
 New-Item -ItemType Directory -Force "$root\.logs" | Out-Null
 
 Write-Host "==> Iniciando API (puerto 3001)..." -ForegroundColor Cyan
@@ -87,20 +111,21 @@ if ($up) { Start-Process "http://localhost:5173" }
 else { Write-Host "El cliente no respondio en 30s - revisar .logs\client.log" -ForegroundColor Yellow }
 
 Write-Host ""
-Write-Host "LootMarket corriendo (en segundo plano):" -ForegroundColor Green
+Write-Host "LootMarket corriendo:" -ForegroundColor Green
 Write-Host "  Cliente: http://localhost:5173"
 Write-Host "  API:     http://localhost:3001"
 Write-Host "  DB:      localhost:5432 (lootmarket)"
 Write-Host ""
 Write-Host "Usuarios demo (pass: password123): ana_buyer, carla_sells, mod_mati, admin_root"
-Write-Host "Para frenar todo: .\stop.ps1"
 Write-Host ""
 
-if ($NoLogs) { exit 0 }
+if ($NoLogs) {
+    Write-Host "Corriendo en segundo plano. Para frenar: .\start.ps1 (reinicia) o .\stop.ps1." -ForegroundColor Yellow
+    exit 0
+}
 
-# 6. Logs en tiempo real en esta consola.
-# Ctrl+C solo corta la vista; API y cliente siguen corriendo en segundo plano.
-Write-Host "==> Logs en vivo (Ctrl+C para salir de la vista, .\stop.ps1 para frenar todo):" -ForegroundColor Cyan
+# 6. Logs en tiempo real. Ctrl+C frena TODO y cierra limpio.
+Write-Host "==> Logs en vivo (Ctrl+C frena API, cliente y DB):" -ForegroundColor Cyan
 Write-Host ""
 
 $tails = @(
@@ -125,5 +150,10 @@ try {
         Start-Sleep -Milliseconds 300
     }
 } finally {
+    # Ctrl+C (o fin del loop): cortar tails y frenar TODO, incluida la DB.
+    Write-Host ""
+    Write-Host "==> Cerrando LootMarket..." -ForegroundColor Yellow
     $jobs | ForEach-Object { Stop-Job $_[0] -ErrorAction SilentlyContinue; Remove-Job $_[0] -Force -ErrorAction SilentlyContinue }
+    Stop-LootMarket -IncludeDb
+    Write-Host "Todo detenido (API, cliente y DB)." -ForegroundColor Green
 }

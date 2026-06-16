@@ -3,6 +3,7 @@ dist/
 .env
 *.pdf.txt
 .logs
+.pids
 
 # Config MCP local (cuenta propia, no versionar)
 .mcp.json
