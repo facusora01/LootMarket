@@ -3,7 +3,7 @@ import { pool, withUserContext } from '../db.js';
 export const listingRepository = {
   // TP4: catalogo publico siempre via vista con DDM — email del vendedor enmascarado
   // Modificado para soportar paginación, filtros de categoría, ordenamiento y búsqueda (q) desde DB
-  async findAllPublicPaginated({ limit, offset, category, sort, q }) {
+  async findAllPublicPaginated({ limit, offset, category, sort, q, minPrice, maxPrice }) {
     let whereClauses = ["status = 'active'"];
     let params = [];
     let paramIndex = 1;
@@ -19,6 +19,20 @@ export const listingRepository = {
     if (q) {
       whereClauses.push(`(LOWER(title) LIKE $${paramIndex} OR LOWER(description) LIKE $${paramIndex} OR LOWER(seller_username) LIKE $${paramIndex})`);
       params.push(`%${q.toLowerCase()}%`);
+      paramIndex++;
+    }
+
+    // Filtro por Precio Mínimo
+    if (minPrice !== undefined && minPrice !== null && minPrice !== '') {
+      whereClauses.push(`price >= $${paramIndex}`);
+      params.push(Number(minPrice));
+      paramIndex++;
+    }
+
+    // Filtro por Precio Máximo
+    if (maxPrice !== undefined && maxPrice !== null && maxPrice !== '') {
+      whereClauses.push(`price <= $${paramIndex}`);
+      params.push(Number(maxPrice));
       paramIndex++;
     }
 

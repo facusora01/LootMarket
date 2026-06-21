@@ -21,6 +21,8 @@ export default function Listings({ user }) {
 
   const [cat, setCat] = useState('all');
   const [sort, setSort] = useState('recent'); // recent | price-asc | price-desc
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -30,25 +32,39 @@ export default function Listings({ user }) {
 
   // Modificado para pedir la data paginada y con filtros directamente al servidor
   const load = () => {
+    if (minPrice !== '' && maxPrice !== '' && parseFloat(minPrice) > parseFloat(maxPrice)) {
+      setError('Precio mínimo no puede ser mayor al precio máximo');
+      setListings([]);
+      setTotalCount(0);
+      return;
+    }
+
     const searchParams = new URLSearchParams({
       limit: ITEMS_PER_PAGE,
       offset: (page - 1) * ITEMS_PER_PAGE,
       category: cat,
       sort: sort,
-      q: query
+      q: query,
+      minPrice: minPrice,
+      maxPrice: maxPrice
     });
 
     api(`/listings?${searchParams.toString()}`)
       .then((res) => {
         setListings(res.data || []);
         setTotalCount(res.total || 0);
+        setError('');
       })
-      .catch((e) => setError(e.message));
+      .catch((e) => {
+        setListings([]);
+        setTotalCount(0);
+        setError(e.message);
+      });
   };
 
   useEffect(() => { 
     load(); 
-  }, [page, cat, sort, query]);
+  }, [page, cat, sort, query, minPrice, maxPrice]);
 
   function buy(id) {
     setError('');
@@ -132,7 +148,73 @@ export default function Listings({ user }) {
             </button>
           ))}
         </div>
-        <div className="lmk-toolbar__right">
+        <div className="lmk-toolbar__right" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-wider)' }}>Precio</span>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <span style={{ position: 'absolute', left: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-faint)', zIndex: 1 }}>$</span>
+              <input
+                type="number"
+                placeholder="Mín"
+                value={minPrice}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '' || Number(val) >= 0) {
+                    setPage(1);
+                    setMinPrice(val);
+                  }
+                }}
+                style={{
+                  width: '80px',
+                  height: '34px',
+                  paddingLeft: 'var(--space-5)',
+                  paddingRight: 'var(--space-2)',
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-default)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--text-body)',
+                  outline: 'none',
+                  fontFamily: 'var(--font-mono)',
+                  transition: 'border-color var(--dur-fast) var(--ease-out)',
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--border-focus)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-default)'}
+              />
+            </div>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--text-faint)' }}>-</span>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <span style={{ position: 'absolute', left: 'var(--space-2)', fontSize: 'var(--text-xs)', color: 'var(--text-faint)', zIndex: 1 }}>$</span>
+              <input
+                type="number"
+                placeholder="Máx"
+                value={maxPrice}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '' || Number(val) >= 0) {
+                    setPage(1);
+                    setMaxPrice(val);
+                  }
+                }}
+                style={{
+                  width: '80px',
+                  height: '34px',
+                  paddingLeft: 'var(--space-5)',
+                  paddingRight: 'var(--space-2)',
+                  background: 'var(--surface-inset)',
+                  border: '1px solid var(--border-default)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--text-body)',
+                  outline: 'none',
+                  fontFamily: 'var(--font-mono)',
+                  transition: 'border-color var(--dur-fast) var(--ease-out)',
+                }}
+                onFocus={(e) => e.target.style.borderColor = 'var(--border-focus)'}
+                onBlur={(e) => e.target.style.borderColor = 'var(--border-default)'}
+              />
+            </div>
+          </div>
           <button className="lmk-sort" onClick={cycleSort} title="Cambiar orden">
             <Icon name="arrow-up-down" size={14} /> {sortLabel}
           </button>

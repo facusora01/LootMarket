@@ -4,17 +4,64 @@ import { authenticate, requireRole } from '../auth.js';
 
 export const listingRoutes = Router();
 
+const ALLOWED_CATEGORIES = ['all', 'account', 'skin', 'item', 'key'];
+const ALLOWED_SORT_OPTIONS = ['recent', 'price-asc', 'price-desc'];
+
 // Catalogo publico: emails enmascarados por la vista DDM (TP4)
 // Modificado para capturar query params de paginación y filtros
 listingRoutes.get('/', async (req, res, next) => {
   try {
-    const limit = parseInt(req.query.limit) || 12;
-    const offset = parseInt(req.query.offset) || 0;
+    const limit = req.query.limit !== undefined ? parseInt(req.query.limit) : 12;
+    const offset = req.query.offset !== undefined ? parseInt(req.query.offset) : 0;
+
+    if (isNaN(limit) || limit < 0) {
+      return res.status(400).json({ error: 'Parámetro limit inválido' });
+    }
+    if (isNaN(offset) || offset < 0) {
+      return res.status(400).json({ error: 'Parámetro offset inválido' });
+    }
+
     const category = req.query.category || 'all';
+    if (!ALLOWED_CATEGORIES.includes(category)) {
+      return res.status(400).json({ error: 'Categoría inválida' });
+    }
+
     const sort = req.query.sort || 'recent';
+    if (!ALLOWED_SORT_OPTIONS.includes(sort)) {
+      return res.status(400).json({ error: 'Parámetro sort inválido' });
+    }
+
     const q = req.query.q || '';
 
-    const result = await listingRepository.findAllPublicPaginated({ limit, offset, category, sort, q });
+    let minPrice = null;
+    if (req.query.minPrice !== undefined && req.query.minPrice !== '') {
+      minPrice = parseFloat(req.query.minPrice);
+      if (isNaN(minPrice) || minPrice < 0) {
+        return res.status(400).json({ error: 'Precio mínimo debe ser un número positivo' });
+      }
+    }
+
+    let maxPrice = null;
+    if (req.query.maxPrice !== undefined && req.query.maxPrice !== '') {
+      maxPrice = parseFloat(req.query.maxPrice);
+      if (isNaN(maxPrice) || maxPrice < 0) {
+        return res.status(400).json({ error: 'Precio máximo debe ser un número positivo' });
+      }
+    }
+
+    if (minPrice !== null && maxPrice !== null && minPrice > maxPrice) {
+      return res.status(400).json({ error: 'Precio mínimo no puede ser mayor al precio máximo' });
+    }
+
+    const result = await listingRepository.findAllPublicPaginated({ 
+      limit, 
+      offset, 
+      category, 
+      sort, 
+      q, 
+      minPrice, 
+      maxPrice 
+    });
     res.json(result); 
   } catch (err) { 
     next(err); 
