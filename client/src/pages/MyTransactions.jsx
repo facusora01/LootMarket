@@ -47,6 +47,12 @@ export default function MyTransactions() {
   const held = txs.filter(t => ['escrow_held', 'item_transferred'].includes(t.status)).length;
   const totalMoved = txs.reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
 
+  // Filtrar cobros acreditados: la venta ya fue liberada (TP3 / released)
+  const isSeller = txs.some(t => t.seller_id === me.id);
+  const accredited = txs
+    .filter(t => t.seller_id === me.id && t.status === 'released')
+    .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+
   return (
     <div className="lmk-screen lmk-tx">
       <div className="lmk-tx__head">
@@ -55,6 +61,14 @@ export default function MyTransactions() {
           <p>Seguí el estado de cada compra y liberá los fondos cuando recibas el item.</p>
         </div>
         <div className="lmk-tx__summary">
+          {isSeller && (
+            <div className="lmk-stat" style={{ borderLeft: '3px solid var(--green-500)' }}>
+              <span>Cobros acreditados</span>
+              <strong style={{ color: 'var(--green-500)', textShadow: 'var(--glow-price)' }}>
+                ${accredited.toFixed(2)}
+              </strong>
+            </div>
+          )}
           <div className="lmk-stat"><span>En escrow</span><strong>{held}</strong></div>
           <div className="lmk-stat"><span>Total movido</span><strong>${totalMoved.toFixed(0)}</strong></div>
         </div>

@@ -126,3 +126,21 @@ ALTER TABLE payment_methods FORCE ROW LEVEL SECURITY;
 CREATE POLICY p_payment_owner ON payment_methods
     USING (user_id = app_user_id())
     WITH CHECK (user_id = app_user_id());
+
+------------------------------------------------------------------
+-- RLS sobre transactions: usuarios solo ven e interactúan con sus propias transacciones (TP3)
+------------------------------------------------------------------
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE transactions FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY p_transactions_select ON transactions
+    FOR SELECT
+    USING (buyer_id = app_user_id() OR seller_id = app_user_id() OR app_role() = 'admin' OR app_role() = 'moderator');
+
+CREATE POLICY p_transactions_insert ON transactions
+    FOR INSERT
+    WITH CHECK (buyer_id = app_user_id() OR app_role() = 'admin');
+
+CREATE POLICY p_transactions_update ON transactions
+    FOR UPDATE
+    USING (buyer_id = app_user_id() OR seller_id = app_user_id() OR app_role() = 'admin' OR app_role() = 'moderator');
