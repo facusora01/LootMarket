@@ -2,11 +2,52 @@ import { pool, withUserContext } from '../db.js';
 
 export const listingRepository = {
   // TP4: catalogo publico siempre via vista con DDM — email del vendedor enmascarado
-  async findAllPublic() {
-    const { rows } = await pool.query(
-      `SELECT * FROM v_listings_public WHERE status = 'active' ORDER BY created_at DESC`
-    );
-    return rows;
+  // Modificado para soportar paginación, filtros de categoría, ordenamiento y búsqueda (q) desde DB
+  async findAllPublicPaginated({ limit, offset, category, sort, q }) {
+    let whereClauses = ["status = 'active'"];
+    let params = [];
+    let paramIndex = 1;
+
+    // Filtro por Categoría
+    if (category !== 'all') {
+      whereClauses.push(`category = $${paramIndex}`);
+      params.push(category);
+      paramIndex++;
+    }
+
+    // Filtro por Búsqueda de Texto (q)
+    if (q) {
+      whereClauses.push(`(LOWER(title) LIKE $${paramIndex} OR LOWER(description) LIKE $${paramIndex} OR LOWER(seller_username) LIKE $${paramIndex})`);
+      params.push(`%${q.toLowerCase()}%`);
+      paramIndex++;
+    }
+
+    const whereSQL = `WHERE ${whereClauses.join(' AND ')}`;
+
+    // Ordenamiento (Sort)
+    let orderBySQL = 'ORDER BY created_at DESC'; 
+    if (sort === 'price-asc') orderBySQL = 'ORDER BY price ASC';
+    else if (sort === 'price-desc') orderBySQL = 'ORDER BY price DESC';
+
+    // Consulta para obtener el TOTAL de registros
+    const countQuery = `SELECT COUNT(*)::int FROM v_listings_public ${whereSQL}`;
+    const countRes = await pool.query(countQuery, params);
+    const total = countRes.rows[0].count;
+
+    // Consulta para obtener la data PAGINADA
+    const selectParams = [...params, limit, offset];
+    const selectQuery = `
+      SELECT * FROM v_listings_public 
+      ${whereSQL} 
+      ${orderBySQL} 
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `;
+    const { rows } = await pool.query(selectQuery, selectParams);
+
+    return {
+      data: rows,
+      total: total
+    };
   },
 
   async findPublicById(id) {

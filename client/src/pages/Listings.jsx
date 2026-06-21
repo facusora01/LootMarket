@@ -15,6 +15,10 @@ const CATEGORIES = [
 
 export default function Listings({ user }) {
   const [listings, setListings] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 4;
+
   const [cat, setCat] = useState('all');
   const [sort, setSort] = useState('recent'); // recent | price-asc | price-desc
   const [error, setError] = useState('');
@@ -24,8 +28,27 @@ export default function Listings({ user }) {
 
   const query = (params.get('q') || '').trim().toLowerCase();
 
-  const load = () => api('/listings').then(setListings).catch((e) => setError(e.message));
-  useEffect(() => { load(); }, []);
+  // Modificado para pedir la data paginada y con filtros directamente al servidor
+  const load = () => {
+    const searchParams = new URLSearchParams({
+      limit: ITEMS_PER_PAGE,
+      offset: (page - 1) * ITEMS_PER_PAGE,
+      category: cat,
+      sort: sort,
+      q: query
+    });
+
+    api(`/listings?${searchParams.toString()}`)
+      .then((res) => {
+        setListings(res.data || []);
+        setTotalCount(res.total || 0);
+      })
+      .catch((e) => setError(e.message));
+  };
+
+  useEffect(() => { 
+    load(); 
+  }, [page, cat, sort, query]);
 
   function buy(id) {
     setError('');
@@ -35,23 +58,17 @@ export default function Listings({ user }) {
   }
 
   function cycleSort() {
+    setPage(1);
     setSort((s) => (s === 'price-asc' ? 'price-desc' : s === 'price-desc' ? 'recent' : 'price-asc'));
   }
 
+  // Mantenemos la lógica de useMemo limpia ya que el filtrado grueso ahora viene del servidor
   const visible = useMemo(() => {
-    let out = cat === 'all' ? listings : listings.filter((l) => l.category === cat);
-    if (query) {
-      out = out.filter((l) =>
-        (l.title || '').toLowerCase().includes(query) ||
-        (l.description || '').toLowerCase().includes(query) ||
-        (l.seller_username || '').toLowerCase().includes(query));
-    }
-    if (sort === 'price-asc') out = [...out].sort((a, b) => a.price - b.price);
-    else if (sort === 'price-desc') out = [...out].sort((a, b) => b.price - a.price);
-    return out;
-  }, [listings, cat, query, sort]);
+    return listings;
+  }, [listings]);
 
   const sortLabel = sort === 'price-asc' ? 'Precio ↑' : sort === 'price-desc' ? 'Precio ↓' : 'Recientes';
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE) || 1;
 
   return (
     <div className="lmk-screen">
@@ -109,7 +126,8 @@ export default function Listings({ user }) {
       <div className="lmk-toolbar" ref={gridRef}>
         <div className="lmk-chips">
           {CATEGORIES.map((c) => (
-            <button key={c.id} className={'lmk-chip' + (cat === c.id ? ' is-active' : '')} onClick={() => setCat(c.id)}>
+            <button key={c.id} className={'lmk-chip' + (cat === c.id ? ' is-active' : '')} 
+              onClick={() => { setPage(1); setCat(c.id); }}>
               <Icon name={c.icon} size={15} />{c.label}
             </button>
           ))}
@@ -123,28 +141,63 @@ export default function Listings({ user }) {
 
       {query && (
         <p className="lmk-empty" style={{ textAlign: 'left', padding: 'var(--space-2) 0', color: 'var(--text-muted)' }}>
-          Resultados para “{params.get('q')}” · {visible.length}
+          Resultados para “{params.get('q')}” · Total: {totalCount}
         </p>
       )}
 
       {visible.length > 0 ? (
-        <div className="lmk-grid">
-          {visible.map((l) => (
-            <ListingCard
-              key={l.id}
-              title={l.title}
-              description={l.description}
-              category={l.category}
-              price={l.price}
-              imageUrl={l.image_url}
-              sellerName={l.seller_username}
-              sellerMasked={l.seller_email_masked}
-              buyable={!!(user && user.username !== l.seller_username)}
-              onBuy={(e) => { e.stopPropagation(); buy(l.id); }}
-              onClick={() => navigate(`/listing/${l.id}`)}
-            />
-          ))}
-        </div>
+        <>
+          <div className="lmk-grid">
+            {visible.map((l) => (
+              <ListingCard
+                key={l.id}
+                title={l.title}
+                description={l.description}
+                category={l.category}
+                price={l.price}
+                imageUrl={l.image_url}
+                sellerName={l.seller_username}
+                sellerMasked={l.seller_email_masked}
+                buyable={!!(user && user.username !== l.seller_username)}
+                onBuy={(e) => { e.stopPropagation(); buy(l.id); }}
+                onClick={() => navigate(`/listing/${l.id}`)}
+              />
+            ))}
+          </div>
+
+          {/* Controles Navigacionales de la Paginación */}
+          <div className="lmk-pagination" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 'var(--space-4)', marginTop: 'var(--space-6)' }}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              leftIcon="arrow-left"
+              disabled={page === 1}
+              onClick={() => {
+                setPage(p => p - 1);
+                gridRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Anterior
+            </Button>
+            
+            <span style={{ fontSize: 'var(--text-sm)', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+              Página {page} de {totalPages}
+            </span>
+
+            <Button 
+              variant="outline" 
+              size="sm" 
+              rightIcon="arrow-right"
+              disabled={page >= totalPages}
+              onClick={() => {
+                setPage(p => p + 1);
+                gridRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              Siguiente
+            </Button>
+          </div>
+        </>
       ) : (
         <p className="lmk-empty">
           {query ? 'Sin resultados para tu búsqueda.' : 'No hay publicaciones en esta categoría.'}
