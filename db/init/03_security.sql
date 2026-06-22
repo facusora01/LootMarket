@@ -144,3 +144,35 @@ CREATE POLICY p_transactions_insert ON transactions
 CREATE POLICY p_transactions_update ON transactions
     FOR UPDATE
     USING (buyer_id = app_user_id() OR seller_id = app_user_id() OR app_role() = 'admin' OR app_role() = 'moderator');
+
+------------------------------------------------------------------
+-- RLS sobre listings: vendedores solo modifican sus propios listings (TP3)
+------------------------------------------------------------------
+ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE listings FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY p_listings_select ON listings
+    FOR SELECT
+    USING (status = 'active' OR seller_id = app_user_id() OR app_role() = 'admin' OR app_role() = 'moderator');
+
+CREATE POLICY p_listings_insert ON listings
+    FOR INSERT
+    WITH CHECK (seller_id = app_user_id() OR app_role() = 'admin');
+
+CREATE POLICY p_listings_update ON listings
+    FOR UPDATE
+    USING (
+        seller_id = app_user_id() 
+        OR app_role() = 'admin'
+        OR (
+            app_role() = 'buyer' 
+            AND (
+                (status = 'active' AND seller_id <> app_user_id()) -- compra
+                OR (status = 'in_escrow') -- confirmacion/release
+            )
+        )
+    );
+
+CREATE POLICY p_listings_delete ON listings
+    FOR DELETE
+    USING (seller_id = app_user_id() OR app_role() = 'admin');
