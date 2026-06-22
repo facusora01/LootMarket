@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '../api.js';
+import { api, invalidateCache } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { Card } from '../components/Card.jsx';
@@ -22,6 +22,7 @@ export default function Payments() {
       setNumber('');
       setMsg('Tarjeta guardada cifrada.');
       setTimeout(() => setMsg(''), 3000);
+      invalidateCache('/payment-methods');
       load();
     } catch (err) { setError(err.message); }
   }

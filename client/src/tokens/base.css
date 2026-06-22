@@ -56,3 +56,16 @@ code, pre, kbd, samp { font-family: var(--font-mono); }
 *::-webkit-scrollbar-thumb:hover { background: var(--ink-500); background-clip: content-box; }
 
 img { max-width: 100%; display: block; }
+
+/* ---- Truncation utilities ------------------------------------------------ */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

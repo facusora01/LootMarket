@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api, session } from '../api.js';
+import { api, session, invalidateCache } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { EscrowStatus } from '../components/EscrowStatus.jsx';
@@ -7,6 +7,7 @@ import { PriceTag } from '../components/PriceTag.jsx';
 import { Input } from '../components/Input.jsx';
 import { Textarea } from '../components/Textarea.jsx';
 import { Card } from '../components/Card.jsx';
+import { Skeleton } from '../components/Skeleton.jsx';
 
 export default function MyTransactions() {
   const [txs, setTxs] = useState([]);
@@ -15,9 +16,14 @@ export default function MyTransactions() {
   const [disputing, setDisputing] = useState(null);
   const [reason, setReason] = useState('');
   const [privateData, setPrivateData] = useState('');
+  const [loading, setLoading] = useState(false);
   const me = session.user;
 
-  const load = () => api('/transactions/mine').then(setTxs).catch((e) => setError(e.message));
+  const load = () => {
+    setLoading(true);
+    setError('');
+    api('/transactions/mine').then(setTxs).catch((e) => setError(e.message)).finally(() => setLoading(false));
+  };
   useEffect(() => { load(); }, []);
 
   async function act(path) {
@@ -26,6 +32,7 @@ export default function MyTransactions() {
       await api(path, { method: 'POST', body: {} });
       setMsg('Acción realizada correctamente.');
       setTimeout(() => setMsg(''), 3000);
+      invalidateCache('/transactions/mine');
       load();
     } catch (err) { setError(err.message); }
   }
@@ -40,6 +47,8 @@ export default function MyTransactions() {
       });
       setMsg('Disputa abierta. Un moderador revisará el caso.');
       setDisputing(null); setReason(''); setPrivateData('');
+      invalidateCache('/transactions/mine');
+      invalidateCache('/disputes');
       load();
     } catch (err) { setError(err.message); }
   }
@@ -77,7 +86,22 @@ export default function MyTransactions() {
       {msg && <div className="lmk-msg-ok"><Icon name="check-circle" size={16} />{msg}</div>}
       {error && <div className="lmk-msg-err"><Icon name="alert-circle" size={16} />{error}</div>}
 
-      {txs.length > 0 ? (
+      {loading && txs.length === 0 ? (
+        <div>
+          <div className="lmk-table">
+            <div className="lmk-table__head">
+              <span>Transacción</span>
+              <span>Tipo</span>
+              <span>Estado</span>
+              <span>Monto</span>
+              <span></span>
+            </div>
+            {Array.from({ length: 3 }, (_, i) => (
+              <Skeleton key={i} variant="row" />
+            ))}
+          </div>
+        </div>
+      ) : txs.length > 0 ? (
         <div>
           <div className="lmk-table">
             <div className="lmk-table__head">

@@ -6,6 +6,7 @@ export const auditRepository = {
   // disputas y toda modificacion posterior de precio/estado, con before/after
   // image y actor de cada operacion.
   // Corre con el contexto del admin: la subquery sobre disputes pasa por RLS.
+  // LM-59: N+1 verificado — 1 query con subqueries, sin loop fetching
   async traceTransaction(user, txId) {
     return withUserContext(user, async (client) => {
       const { rows } = await client.query(

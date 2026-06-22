@@ -110,7 +110,18 @@ CREATE TABLE audit_log (
 );
 
 CREATE INDEX idx_listings_status ON listings(status);
-CREATE INDEX idx_tx_buyer ON transactions(buyer_id);
-CREATE INDEX idx_tx_seller ON transactions(seller_id);
-CREATE INDEX idx_audit_table_row ON audit_log(table_name, row_id);
+-- LM-58: composite indexes for listing filtering + sorting
+CREATE INDEX idx_listings_cat_created ON listings(status, category, created_at DESC);
+CREATE INDEX idx_listings_cat_price   ON listings(status, category, price);
+
+-- LM-58: extend transaction indexes with sort order
+CREATE INDEX idx_tx_buyer_created ON transactions(buyer_id, created_at DESC);
+CREATE INDEX idx_tx_seller_created ON transactions(seller_id, created_at DESC);
+
+-- LM-58: partial index for open disputes (most frequent dispute query)
+CREATE INDEX idx_disputes_open ON disputes(status) WHERE status = 'open';
+
+-- LM-58: audit log ordering for forensic traces
+CREATE INDEX idx_audit_table_row_at ON audit_log(table_name, row_id, at, id);
+
 CREATE INDEX idx_jit_active ON jit_grants(moderator_id, dispute_id) WHERE NOT revoked;

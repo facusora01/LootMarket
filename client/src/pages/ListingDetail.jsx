@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../api.js';
+import { api, invalidateCache } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { Card } from '../components/Card.jsx';
 import { Badge } from '../components/Badge.jsx';
 import { PriceTag } from '../components/PriceTag.jsx';
 import { EscrowStatus } from '../components/EscrowStatus.jsx';
+import { Skeleton } from '../components/Skeleton.jsx';
 
 const CAT_TINT = {
   account: 'var(--indigo-500)',
@@ -22,10 +23,12 @@ export default function ListingDetail({ user }) {
   const [listing, setListing] = useState(null);
   const [error, setError] = useState('');
   const [bought, setBought] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setError(''); setListing(null);
-    api(`/listings/${id}`).then(setListing).catch((e) => setError(e.message));
+    setError(''); setListing(null); setBought(false);
+    setLoading(true);
+    api(`/listings/${id}`).then(setListing).catch((e) => setError(e.message)).finally(() => setLoading(false));
   }, [id]);
 
   async function buy() {
@@ -33,6 +36,8 @@ export default function ListingDetail({ user }) {
     try {
       await api('/transactions', { method: 'POST', body: { listingId: listing.id } });
       setBought(true);
+      invalidateCache('/listings');
+      invalidateCache('/transactions');
     } catch (err) {
       setError(err.message);
     }
@@ -56,6 +61,25 @@ export default function ListingDetail({ user }) {
   }
 
   if (!listing) {
+    if (loading) {
+      return (
+        <div className="lmk-screen lmk-detail">
+          <button className="lmk-back" onClick={back}>
+            <Icon name="arrow-left" size={16} /> Volver al mercado
+          </button>
+          <div className="lmk-detail__grid">
+            <div><Skeleton variant="thumb" /></div>
+            <div className="lmk-detail__side">
+              <Skeleton variant="text" width="80%" height="2rem" />
+              <Skeleton variant="text" count={3} />
+              <Skeleton variant="text" width="60%" />
+              <Skeleton variant="badge" />
+              <Skeleton variant="card" height="200px" />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="lmk-screen lmk-detail">
         <p className="lmk-empty">Cargando publicación…</p>

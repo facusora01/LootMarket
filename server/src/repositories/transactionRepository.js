@@ -59,6 +59,7 @@ export const transactionRepository = {
     });
   },
 
+  // LM-59: N+1 verificado — 1 query con JOIN, sin loop fetching
   async findByUser(user) {
     return withUserContext(user, async (client) => {
       const { rows } = await client.query(

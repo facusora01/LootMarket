@@ -43,4 +43,12 @@
   --container-max: 1200px;
   --container-narrow: 960px;
   --nav-height: 64px;
+
+  /* Z-index scale */
+  --z-base:     1;
+  --z-header:   20;
+  --z-dropdown: 50;
+  --z-toast:    60;
+  --z-overlay:  70;
+  --z-modal:    80;
 }

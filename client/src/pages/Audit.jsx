@@ -3,6 +3,7 @@ import { api } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { Input } from '../components/Input.jsx';
+import { Skeleton } from '../components/Skeleton.jsx';
 
 const COLS = [
   { key: 'id', label: '#' },
@@ -20,10 +21,13 @@ export default function Audit() {
   const [txId, setTxId] = useState('');
   const [error, setError] = useState('');
   const [title, setTitle] = useState('Últimos eventos');
+  const [loading, setLoading] = useState(false);
 
   const loadRecent = () => {
     setTitle('Últimos eventos');
-    api('/admin/audit').then(setRows).catch((e) => setError(e.message));
+    setLoading(true);
+    setError('');
+    api('/admin/audit').then(setRows).catch((e) => setError(e.message)).finally(() => setLoading(false));
   };
   useEffect(() => { loadRecent(); }, []);
 
@@ -130,7 +134,13 @@ export default function Audit() {
               ))}
             </tbody>
           </table>
-          {rows.length === 0 && <p className="lmk-empty">Sin eventos.</p>}
+          {loading && rows.length === 0 ? (
+            Array.from({ length: 5 }, (_, i) => (
+              <Skeleton key={i} variant="row" />
+            ))
+          ) : rows.length === 0 ? (
+            <p className="lmk-empty">Sin eventos.</p>
+          ) : null}
         </div>
       </div>
     </div>

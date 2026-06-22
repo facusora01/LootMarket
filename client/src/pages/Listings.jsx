@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { api } from '../api.js';
+import { api, invalidateCache } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { ListingCard } from '../components/ListingCard.jsx';
+import { Skeleton } from '../components/Skeleton.jsx';
 
 const CATEGORIES = [
   { id: 'all', label: 'Todos', icon: 'layout-grid' },
@@ -23,6 +24,7 @@ export default function Listings({ user }) {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const gridRef = useRef(null);
@@ -41,6 +43,8 @@ export default function Listings({ user }) {
       return;
     }
 
+    setLoading(true);
+    setError('');
     const searchParams = new URLSearchParams({
       limit: ITEMS_PER_PAGE,
       offset: (page - 1) * ITEMS_PER_PAGE,
@@ -61,7 +65,8 @@ export default function Listings({ user }) {
         setListings([]);
         setTotalCount(0);
         setError(e.message);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -74,7 +79,11 @@ export default function Listings({ user }) {
   function buy(id) {
     setError('');
     api('/transactions', { method: 'POST', body: { listingId: id } })
-      .then(() => navigate('/transactions'))
+      .then(() => {
+        invalidateCache('/listings');
+        invalidateCache('/transactions');
+        navigate('/transactions');
+      })
       .catch((err) => setError(err.message));
   }
 
@@ -234,7 +243,13 @@ export default function Listings({ user }) {
         </p>
       )}
 
-      {visible.length > 0 ? (
+      {loading && visible.length === 0 ? (
+        <div className="lmk-grid">
+          {Array.from({ length: ITEMS_PER_PAGE }, (_, i) => (
+            <Skeleton key={i} variant="card" />
+          ))}
+        </div>
+      ) : visible.length > 0 ? (
         <>
           <div className="lmk-grid">
             {visible.map((l) => (

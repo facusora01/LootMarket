@@ -23,6 +23,7 @@ export const disputeRepository = {
 
   // Listado para moderadores: solo metadatos, SIN datos privados.
   // Vista RBAC basica; el detalle requiere JIT (TP8).
+  // LM-59: N+1 verificado — 1 query con EXISTS subquery, sin loop fetching
   async listOpenSummaries(user) {
     return withUserContext(user, async (client) => {
       const { rows } = await client.query(

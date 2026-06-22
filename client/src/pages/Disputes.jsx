@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '../api.js';
+import { api, invalidateCache } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { Badge } from '../components/Badge.jsx';
@@ -25,6 +25,7 @@ export default function Disputes({ user }) {
       const g = await api(`/disputes/${requestingFor}/jit`, { method: 'POST', body: { reason: jitReason } });
       setMsg(`Acceso JIT otorgado hasta ${new Date(g.expires_at).toLocaleTimeString()} (15 min). Quedó auditado.`);
       setRequestingFor(null); setJitReason('');
+      invalidateCache('/disputes');
       load();
     } catch (err) { setError(err.message); }
   }
@@ -41,6 +42,8 @@ export default function Disputes({ user }) {
       await api(`/disputes/${id}/resolve`, { method: 'POST', body: { winner, resolution } });
       setMsg(`Disputa #${id} resuelta a favor del ${winner === 'buyer' ? 'comprador (reembolso)' : 'vendedor (liberación)'}.`);
       setDetail(null); setResolution('');
+      invalidateCache('/disputes');
+      invalidateCache('/transactions');
       load();
     } catch (err) { setError(err.message); }
   }

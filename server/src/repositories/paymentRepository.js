@@ -17,6 +17,7 @@ export const paymentRepository = {
   },
 
   // RLS garantiza que solo el dueño ve sus tarjetas; ademas solo se expone last4
+  // LM-59: N+1 verificado — 1 query, sin loop fetching
   async listMine(user) {
     return withUserContext(user, async (client) => {
       const { rows } = await client.query(
