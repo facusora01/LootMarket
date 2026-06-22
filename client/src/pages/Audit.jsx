@@ -1,8 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { api } from '../api.js';
 import { Icon } from '../components/Icon.jsx';
 import { Button } from '../components/Button.jsx';
 import { Input } from '../components/Input.jsx';
+
+const COLS = [
+  { key: 'id', label: '#' },
+  { key: 'at', label: 'Cuándo' },
+  { key: 'table_name', label: 'Tabla' },
+  { key: 'operation', label: 'Op' },
+  { key: 'row_id', label: 'Fila' },
+  { key: 'actor_id', label: 'Actor' },
+  { key: 'before_img', label: 'Before' },
+  { key: 'after_img', label: 'After' },
+];
 
 export default function Audit() {
   const [rows, setRows] = useState([]);
@@ -26,6 +37,30 @@ export default function Audit() {
   }
 
   const opColor = { INSERT: 'lmk-op-insert', UPDATE: 'lmk-op-update', DELETE: 'lmk-op-delete' };
+
+  // Ordenamiento client-side: click en un header alterna asc/desc.
+  const [sortKey, setSortKey] = useState('id');
+  const [sortDir, setSortDir] = useState('desc');
+
+  function toggleSort(key) {
+    if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else { setSortKey(key); setSortDir('asc'); }
+  }
+
+  const sortedRows = useMemo(() => {
+    const val = (r) => {
+      if (sortKey === 'at') return new Date(r.at).getTime();
+      if (sortKey === 'id' || sortKey === 'row_id') return Number(r[sortKey]) || 0;
+      if (sortKey === 'before_img' || sortKey === 'after_img') return r[sortKey] ? JSON.stringify(r[sortKey]) : '';
+      return (r[sortKey] ?? '').toString().toLowerCase();
+    };
+    return [...rows].sort((a, b) => {
+      const va = val(a), vb = val(b);
+      if (va < vb) return sortDir === 'asc' ? -1 : 1;
+      if (va > vb) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [rows, sortKey, sortDir]);
 
   return (
     <div className="lmk-screen">
@@ -65,18 +100,23 @@ export default function Audit() {
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Cuándo</th>
-                <th>Tabla</th>
-                <th>Op</th>
-                <th>Fila</th>
-                <th>Actor</th>
-                <th>Before</th>
-                <th>After</th>
+                {COLS.map((c) => (
+                  <th
+                    key={c.key}
+                    onClick={() => toggleSort(c.key)}
+                    style={{ cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap' }}
+                    title="Ordenar"
+                  >
+                    {c.label}
+                    <span style={{ color: 'var(--text-faint)', marginLeft: 4 }}>
+                      {sortKey === c.key ? (sortDir === 'asc' ? '▲' : '▼') : '↕'}
+                    </span>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {sortedRows.map((r) => (
                 <tr key={r.id}>
                   <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-faint)' }}>{r.id}</td>
                   <td style={{ whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>{new Date(r.at).toLocaleString()}</td>

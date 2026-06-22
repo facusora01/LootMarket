@@ -17,7 +17,6 @@ export default function Listings({ user }) {
   const [listings, setListings] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 4;
 
   const [cat, setCat] = useState('all');
   const [sort, setSort] = useState('recent'); // recent | price-asc | price-desc
@@ -29,6 +28,9 @@ export default function Listings({ user }) {
   const gridRef = useRef(null);
 
   const query = (params.get('q') || '').trim().toLowerCase();
+  const isSearch = query.length > 0;
+  // En inicio mostramos pocos (vista destacada); en búsqueda, página más grande.
+  const ITEMS_PER_PAGE = isSearch ? 20 : 4;
 
   // Modificado para pedir la data paginada y con filtros directamente al servidor
   const load = () => {
@@ -62,9 +64,12 @@ export default function Listings({ user }) {
       });
   };
 
-  useEffect(() => { 
-    load(); 
+  useEffect(() => {
+    load();
   }, [page, cat, sort, query, minPrice, maxPrice]);
+
+  // Al cambiar la búsqueda, volver a la primera página.
+  useEffect(() => { setPage(1); }, [query]);
 
   function buy(id) {
     setError('');
@@ -88,6 +93,7 @@ export default function Listings({ user }) {
 
   return (
     <div className="lmk-screen">
+      {!isSearch && (
       <section className="lmk-hero">
         <div className="lmk-hero__copy">
           <span className="lmk-eyebrow">
@@ -136,6 +142,7 @@ export default function Listings({ user }) {
           </div>
         </div>
       </section>
+      )}
 
       {error && <div className="lmk-msg-err"><Icon name="alert-circle" size={16} />{error}</div>}
 

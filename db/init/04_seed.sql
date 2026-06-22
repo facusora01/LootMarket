@@ -24,6 +24,15 @@ VALUES (5, 1, 3, 800.00, 'disputed');
 
 UPDATE listings SET status = 'in_escrow' WHERE id = 5;
 
+-- Caso forense (TP7): la vendedora MODIFICA el precio del item DESPUES de la venta.
+-- El trigger lo registra en audit_log con before/after image y actor = carla (id 3).
+-- Aparece al rastrear la transaccion #1: el monto cobrado fue 800 pero el listing
+-- quedo en 950 -> evidencia de manipulacion posterior, imposible de negar.
+SELECT set_config('app.user_id', '3', false);   -- carla (vendedora)
+UPDATE listings SET price = 850.00, updated_at = now() WHERE id = 5;
+UPDATE listings SET price = 950.00, updated_at = now() WHERE id = 5;
+SELECT set_config('app.user_id', 'seed', false); -- restaurar actor de seed
+
 INSERT INTO disputes (transaction_id, opened_by, reason, private_account_data)
 VALUES (1, 1,
         'El vendedor nunca transfirio la cuenta. Pago hace 5 dias.',

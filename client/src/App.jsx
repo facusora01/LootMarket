@@ -28,7 +28,7 @@ function AppHeader({ user, onLogout }) {
 
   // Catálogo para el autocomplete: se carga una vez y se refresca al loguear.
   useEffect(() => {
-    api('/listings').then(setCatalog).catch(() => setCatalog([]));
+    api('/listings?limit=1000').then((r) => setCatalog(r.data || [])).catch(() => setCatalog([]));
   }, [user]);
 
   // Mantener el input sincronizado cuando la URL cambia (back/forward, navegación interna).
