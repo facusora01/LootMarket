@@ -1,5 +1,15 @@
 # 🎮 LootMarket — Marketplace de Gaming
 
+## Integrantes
+
+| Integrante | Legajo |
+|---|---|
+| Facundo Sorasio | 108882 |
+| Mateo Sparta | [Agregar Aquí] |
+| Tomas Ruiz | [Agregar Aquí] |
+| Jose Zerpa | 110698 |
+| Rodrigo Vargas | 97076 |
+
 Marketplace peer-to-peer de cuentas, skins, ítems y claves de activación, con
 escrow, historial de trades auditable y resolución de disputas.
 
