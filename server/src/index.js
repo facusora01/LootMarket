@@ -22,8 +22,9 @@ const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:5173')
 app.use(cors({
   origin: (origin, cb) => {
     // Permitir herramientas sin Origin (curl, tests) y los origenes en allowlist.
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-    return cb(new Error('Origen no permitido por CORS'));
+    // Origen no permitido: no se setea Access-Control-Allow-Origin (el browser
+    // bloquea la lectura cross-origin) sin lanzar 500.
+    cb(null, !origin || ALLOWED_ORIGINS.includes(origin));
   },
 }));
 
