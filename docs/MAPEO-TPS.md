@@ -57,8 +57,10 @@ los datos sensibles.
 
 - **RBAC** — [auth.js](../server/src/auth.js), función
   [requireRole()](../server/src/auth.js): middleware Express que corta con 403 si
-  `req.user.role` no está en la lista. Ej: `requireRole('seller', 'admin')` en
-  [routes/listings.js](../server/src/routes/listings.js).
+  `req.user.role` no está en la lista. Ej: `requireRole('user', 'admin')` para
+  publicar/editar/borrar en [routes/listings.js](../server/src/routes/listings.js),
+  o `requireRole('moderator', 'admin')` para el panel de disputas. Roles:
+  `user` (compra y vende), `moderator`, `admin`.
 
 - **ABAC / RLS** — [03_security.sql](../db/init/03_security.sql) sobre la tabla
   `disputes` (`ENABLE` + `FORCE ROW LEVEL SECURITY`). Policies:

@@ -5,6 +5,15 @@ escrow, historial de trades auditable y resolución de disputas.
 
 **Stack:** React (Vite) · Node/Express · PostgreSQL 16 (Docker)
 
+## Funcionalidades
+
+- **Cuenta única**: toda cuenta normal (`user`) puede **comprar y vender** — es un marketplace P2P, no hay roles separados de comprador/vendedor.
+- **Catálogo**: búsqueda, filtros (categoría, precio), orden y paginación; "Explorar mercado" lista todos los productos.
+- **Escrow completo**: compra → vendedor transfiere → comprador confirma → fondos liberados. Con disputas y resolución por moderador.
+- **Perfil** (`/profile`): datos de la cuenta, mis publicaciones (editar precio / borrar), resumen de trades y medios de pago.
+- **Notificaciones** in-app de compra/venta/escrow/disputa (campana en el header).
+- **Seguridad** (TP1-8): RLS/ABAC, DDM, cifrado en reposo, auditoría forense append-only y elevación JIT — ver mapeo abajo.
+
 ## Cómo correrlo
 
 ```bash
@@ -22,16 +31,26 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
+En Windows alcanza con `.\start.ps1` (levanta DB + API + cliente).
+
+**Tests de integración** (26 casos de uso, requiere la app corriendo):
+
+```bash
+node server/tests/m9.mjs
+```
+
 Usuarios demo (password `password123`):
 
 | Usuario | Rol |
 |---|---|
-| `ana_buyer` | Comprador |
-| `bruno_buyer` | Comprador |
-| `carla_sells` | Vendedor |
-| `dario_sells` | Vendedor |
+| `ana_buyer` | Usuario (compra y vende) |
+| `bruno_buyer` | Usuario |
+| `carla_sells` | Usuario |
+| `dario_sells` | Usuario |
 | `mod_mati` | Moderador de disputas |
 | `admin_root` | Administrador |
+
+> Los nombres `*_buyer` / `*_sells` son históricos: todos son cuentas `user` con los mismos permisos. El registro público crea siempre una cuenta `user`.
 
 ## Mapeo de temas de los TPs
 
