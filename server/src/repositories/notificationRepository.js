@@ -2,14 +2,11 @@ import { withUserContext } from '../db.js';
 
 export const notificationRepository = {
   // Inserta una notificacion usando un client ya dentro de una transaccion
-  // (para que sea atomica con el evento que la origina). La policy RLS de INSERT
-  // es abierta: el server confiable puede notificar a la contraparte.
+  // (para que sea atomica con el evento que la origina). Via notify_user()
+  // (SECURITY DEFINER): permite notificar a la contraparte sin abrir el INSERT
+  // directo a cualquier user_id (la policy RLS exige user_id = app_user_id()).
   async notify(client, userId, kind, message, link = null) {
-    await client.query(
-      `INSERT INTO notifications (user_id, kind, message, link)
-       VALUES ($1, $2, $3, $4)`,
-      [userId, kind, message, link]
-    );
+    await client.query(`SELECT notify_user($1, $2, $3, $4)`, [userId, kind, message, link]);
   },
 
   async listMine(user) {

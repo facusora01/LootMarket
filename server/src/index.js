@@ -26,6 +26,7 @@ app.use(cors({
     // bloquea la lectura cross-origin) sin lanzar 500.
     cb(null, !origin || ALLOWED_ORIGINS.includes(origin));
   },
+  credentials: true, // permite el envio de la cookie de sesion (V8)
 }));
 
 // ISO 27001 A.8.9: cabeceras de seguridad basicas (sin dependencias extra).

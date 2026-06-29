@@ -19,8 +19,8 @@ export default function Login({ onAuth }) {
     setError('');
     try {
       const path = mode === 'login' ? '/auth/login' : '/auth/register';
-      const { user, token } = await api(path, { method: 'POST', body: form });
-      session.save(token, user);
+      const { user } = await api(path, { method: 'POST', body: form });
+      session.save(user);
       onAuth(user);
       navigate('/');
     } catch (err) {

@@ -20,9 +20,9 @@
 | V3 | Alta | CORS abierto a cualquier origen (`*`) | A.8.20 / A.8.23 | ✅ Corregido |
 | V4 | Media | Login sin límite de intentos ni registro de fallos | A.8.5 / A.8.16 | ✅ Corregido |
 | V5 | Media | Sin cabeceras de seguridad; `X-Powered-By` expuesto | A.8.9 | ✅ Corregido |
-| V6 | Media | RLS de `notifications` permite forjar notificaciones | A.8.3 | 📋 Recomendación |
-| V7 | Baja | Política de contraseñas débil (mín. 6, sin complejidad) | A.8.5 / A.5.17 | 📋 Recomendación |
-| V8 | Baja | Token de sesión en `localStorage` (exfiltrable por XSS) | A.8.28 | 📋 Recomendación |
+| V6 | Media | RLS de `notifications` permite forjar notificaciones | A.8.3 | ✅ Corregido |
+| V7 | Baja | Política de contraseñas débil (mín. 6, sin complejidad) | A.8.5 / A.5.17 | ✅ Corregido |
+| V8 | Baja | Token de sesión en `localStorage` (exfiltrable por XSS) | A.8.28 | ✅ Corregido |
 
 **Lo que ya estaba bien (no son hallazgos):** parametrización total contra SQLi (A.8.28),
 RLS/ABAC sobre datos sensibles (A.8.3), hashing bcrypt de contraseñas (A.8.24),
@@ -209,51 +209,113 @@ app.use((_req, res, next) => {
 
 ---
 
-## V6 — MEDIA: la RLS de `notifications` permite forjar notificaciones (recomendación)
+## V6 — MEDIA: la RLS de `notifications` permitía forjar notificaciones
 
 **Control:** A.8.3 (Restricción del acceso a la información) — integridad.
 
-La política de INSERT es `WITH CHECK (true)`: cualquier sesión con el rol de app puede
-insertar una notificación para **cualquier** `user_id`. Hoy mitigado porque no hay ruta
-pública de INSERT, pero como defensa en profundidad la regla es demasiado laxa.
+La política de INSERT era `WITH CHECK (true)`: cualquier sesión con el rol de app podía
+insertar una notificación para **cualquier** `user_id`.
 
 ### Antes — `db/init/03_security.sql`
 ```sql
 CREATE POLICY p_notif_insert ON notifications FOR INSERT WITH CHECK (true);
 ```
 
-### Después (propuesto)
+### Después — `db/init/03_security.sql`
 El servidor notifica a *otro* usuario (comprador → vendedor), así que no sirve
-`user_id = app_user_id()`. La corrección correcta es encapsular el insert en una función
-`SECURITY DEFINER` (propiedad de `postgres`, que bypassa RLS) y restringir el INSERT directo:
+`user_id = app_user_id()` a secas. Se encapsula el insert en una función
+`SECURITY DEFINER` (owner `postgres`, que bypassa RLS) y se restringe el INSERT directo:
 ```sql
 CREATE POLICY p_notif_insert ON notifications
     FOR INSERT WITH CHECK (user_id = app_user_id());
 
 CREATE FUNCTION notify_user(p_uid int, p_kind text, p_msg text, p_link text)
-RETURNS void AS $$
-    INSERT INTO notifications(user_id, kind, message, link)
+RETURNS void
+LANGUAGE sql SECURITY DEFINER SET search_path = public
+AS $$
+    INSERT INTO notifications (user_id, kind, message, link)
     VALUES (p_uid, p_kind, p_msg, p_link);
-$$ LANGUAGE sql SECURITY DEFINER;
+$$;
+REVOKE ALL ON FUNCTION notify_user(int, text, text, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION notify_user(int, text, text, text) TO lootmarket_app;
 ```
-y `notificationRepository.notify()` llamaría a `SELECT notify_user($1,$2,$3,$4)`.
+`notificationRepository.notify()` ahora llama `SELECT notify_user($1,$2,$3,$4)`.
 
-> No se aplicó automáticamente para no arriesgar el flujo de escrow sin correr la suite
-> de integración (`server/tests/m9.mjs`) contra una DB recreada. Acción correctiva
-> priorizada (cláusula 10.1).
+**Verificado:** con contexto de app `user_id=1`, un INSERT directo de notificación para
+`user_id=2` (forja) devuelve `ERROR: new row violates row-level security policy`; la misma
+notificación vía `notify_user()` (camino legítimo del server) se inserta OK. La suite
+`m9` (29/29) sigue verde, incluido el caso de notificaciones de compra/venta/escrow.
 
 ---
 
-## V7 — BAJA: política de contraseñas débil (recomendación)
+## V7 — BAJA: política de contraseñas débil
 
-**Control:** A.8.5 / A.5.17. `auth.js` exige solo 6 caracteres, sin complejidad ni
-chequeo contra contraseñas comprometidas. Recomendación: mínimo 10–12 y validar contra
-una lista de filtradas (k-anonymity de HIBP).
+**Control:** A.8.5 / A.5.17. `auth.js` exigía solo 6 caracteres, sin complejidad.
 
-## V8 — BAJA: token de sesión en `localStorage` (recomendación)
+### Antes — `server/src/routes/auth.js`
+```js
+if (String(password).length < 6) {
+  return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+}
+```
 
-**Control:** A.8.28. `client/src/api.js` guarda el token en `localStorage`, exfiltrable
-por cualquier XSS. Recomendación: cookie `HttpOnly` + `SameSite=Strict` + CSRF token.
+### Después — `server/src/routes/auth.js`
+```js
+const pw = String(password);
+if (pw.length < 10 || !/[a-zA-Z]/.test(pw) || !/[0-9]/.test(pw)) {
+  return res.status(400).json({
+    error: 'La contraseña debe tener al menos 10 caracteres e incluir letras y números',
+  });
+}
+```
+**Verificado:** registro con `abc123` → HTTP 400; con contraseña válida → HTTP 201.
+
+> Mejora futura: validar contra una lista de contraseñas filtradas (k-anonymity de HIBP).
+
+## V8 — BAJA: token de sesión en `localStorage`
+
+**Control:** A.8.28 (Codificación segura).
+
+`client/src/api.js` guardaba el token en `localStorage` y lo mandaba como header
+`Authorization: Bearer`. Cualquier XSS podía leer `localStorage` y exfiltrar la sesión.
+
+### Antes
+```js
+// api.js
+get token() { return localStorage.getItem(TOKEN_KEY); }
+save(token, user) { localStorage.setItem(TOKEN_KEY, token); ... }
+// y en cada request:
+if (session.token) headers.Authorization = `Bearer ${session.token}`;
+```
+
+### Después
+El token pasa a una cookie **HttpOnly + SameSite=Strict** (inaccesible para JS →
+no se puede robar por XSS; SameSite=Strict mitiga CSRF). El cliente ya no guarda ni
+maneja el token: el navegador envía la cookie solo.
+```js
+// auth.js (server)
+export const sessionCookieOptions = {
+  httpOnly: true, sameSite: 'strict',
+  secure: process.env.NODE_ENV === 'production', path: '/',
+  maxAge: 8 * 60 * 60 * 1000,
+};
+// login/register: res.cookie('lm_session', token, sessionCookieOptions)
+// logout:         res.clearCookie('lm_session', { path: '/' })
+// authenticate(): lee la cookie lm_session O el header Bearer (compat API/tests)
+```
+```js
+// api.js (cliente): sin token en localStorage; la cookie viaja sola
+fetch(`/api${path}`, { ..., credentials: 'include' });
+```
+CORS pasa a `credentials: true` (necesario para enviar la cookie). Se mantiene
+soporte de `Authorization: Bearer` para clientes de API y la suite `m9`.
+
+**Verificado:** login → `Set-Cookie: lm_session=…; HttpOnly; SameSite=Strict`; `/me`
+solo con cookie → 200; sin cookie ni Bearer → 401; con Bearer → 200; logout limpia la
+cookie. `m9` 29/29 verde.
+
+> Para una sesión ya abierta en el navegador con el esquema viejo (token en
+> `localStorage`), hace falta **volver a loguearse** una vez para obtener la cookie.
 
 ---
 

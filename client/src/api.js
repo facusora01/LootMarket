@@ -2,21 +2,20 @@
 // Cache keyeado por method:path, stale a los 30s (listas) / 60s (detalle).
 // Mutaciones invalidan prefixes explicitos para mantener datos frescos.
 
-const TOKEN_KEY = 'lootmarket_token';
 const USER_KEY = 'lootmarket_user';
 
+// El token de sesion vive en una cookie HttpOnly (inaccesible para JS: no se
+// puede robar via XSS). El navegador la envia solo. Aca solo guardamos el user
+// para pintar la UI; no es secreto.
 export const session = {
-  get token() { return localStorage.getItem(TOKEN_KEY); },
   get user() {
     const raw = localStorage.getItem(USER_KEY);
     return raw ? JSON.parse(raw) : null;
   },
-  save(token, user) {
-    localStorage.setItem(TOKEN_KEY, token);
+  save(user) {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   },
   clear() {
-    localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     clearAllCache();
   },
@@ -68,11 +67,11 @@ export async function api(path, { method = 'GET', body, staleTime } = {}) {
   }
 
   const headers = { 'Content-Type': 'application/json' };
-  if (session.token) headers.Authorization = `Bearer ${session.token}`;
 
   const res = await fetch(`/api${path}`, {
     method,
     headers,
+    credentials: 'include', // envia la cookie de sesion HttpOnly (V8)
     body: body ? JSON.stringify(body) : undefined,
   });
 

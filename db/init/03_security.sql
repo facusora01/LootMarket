@@ -165,9 +165,26 @@ CREATE POLICY p_notif_select ON notifications
     FOR SELECT
     USING (user_id = app_user_id() OR app_role() = 'admin');
 
+-- A.8.3 (restriccion de acceso): por INSERT directo un usuario solo puede crear
+-- notificaciones para si mismo. El server notifica a la contraparte (otro user_id)
+-- via notify_user(), una funcion SECURITY DEFINER (corre como owner=postgres, que
+-- bypassa RLS). Asi se elimina el WITH CHECK(true) que permitia forjar notificaciones.
 CREATE POLICY p_notif_insert ON notifications
     FOR INSERT
-    WITH CHECK (true);
+    WITH CHECK (user_id = app_user_id());
+
+CREATE FUNCTION notify_user(p_uid int, p_kind text, p_msg text, p_link text)
+RETURNS void
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+    INSERT INTO notifications (user_id, kind, message, link)
+    VALUES (p_uid, p_kind, p_msg, p_link);
+$$;
+
+REVOKE ALL ON FUNCTION notify_user(int, text, text, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION notify_user(int, text, text, text) TO lootmarket_app;
 
 CREATE POLICY p_notif_update ON notifications
     FOR UPDATE

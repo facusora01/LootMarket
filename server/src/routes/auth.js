@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { userRepository } from '../repositories/userRepository.js';
-import { authenticate } from '../auth.js';
+import { authenticate, SESSION_COOKIE, sessionCookieOptions } from '../auth.js';
 
 export const authRoutes = Router();
 
@@ -56,8 +56,12 @@ authRoutes.post('/register', async (req, res, next) => {
       return res.status(400).json({ error: 'El formato de email no es válido' });
     }
 
-    if (String(password).length < 6) {
-      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
+    // ISO 27001 A.8.5 / A.5.17: política mínima de contraseña.
+    const pw = String(password);
+    if (pw.length < 10 || !/[a-zA-Z]/.test(pw) || !/[0-9]/.test(pw)) {
+      return res.status(400).json({
+        error: 'La contraseña debe tener al menos 10 caracteres e incluir letras y números',
+      });
     }
 
     // Registro publico crea siempre cuenta 'user' (compra y vende).
@@ -70,6 +74,7 @@ authRoutes.post('/register', async (req, res, next) => {
     });
     
     const token = await userRepository.createSession(user.id);
+    res.cookie(SESSION_COOKIE, token, sessionCookieOptions);
     res.status(201).json({ user, token });
   } catch (err) {
     if (err.code === '23505') {
@@ -96,6 +101,7 @@ authRoutes.post('/login', loginRateLimit, async (req, res, next) => {
     // Login exitoso: limpiar el contador de intentos.
     loginAttempts.delete(req._loginKey);
     const token = await userRepository.createSession(user.id);
+    res.cookie(SESSION_COOKIE, token, sessionCookieOptions);
     res.json({ user, token });
   } catch (err) { next(err); }
 });
@@ -103,6 +109,7 @@ authRoutes.post('/login', loginRateLimit, async (req, res, next) => {
 authRoutes.post('/logout', authenticate, async (req, res, next) => {
   try {
     await userRepository.deleteSession(req.token);
+    res.clearCookie(SESSION_COOKIE, { path: '/' });
     res.json({ ok: true });
   } catch (err) { next(err); }
 });
