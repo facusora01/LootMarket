@@ -3,6 +3,7 @@ import { Routes, Route, Link, useNavigate, useLocation, useSearchParams, Navigat
 import { api, session } from './api.js';
 import { Icon } from './components/Icon.jsx';
 import { Avatar } from './components/Avatar.jsx';
+import { NotificationBell } from './components/NotificationBell.jsx';
 import { Button } from './components/Button.jsx';
 import DotGrid from './components/DotGrid.jsx';
 import Listings from './pages/Listings.jsx';
@@ -13,6 +14,7 @@ import MyTransactions from './pages/MyTransactions.jsx';
 import Disputes from './pages/Disputes.jsx';
 import Audit from './pages/Audit.jsx';
 import Payments from './pages/Payments.jsx';
+import Profile from './pages/Profile.jsx';
 
 function AppHeader({ user, onLogout }) {
   const location = useLocation();
@@ -92,9 +94,8 @@ function AppHeader({ user, onLogout }) {
 
   const nav = [
     { to: '/', label: 'Mercado', show: true },
+    { to: '/sell', label: 'Vender', show: !!user },
     { to: '/transactions', label: 'Mis trades', show: !!user },
-    { to: '/payments', label: 'Pagos', show: !!user },
-    { to: '/sell', label: 'Vender', show: user?.role === 'seller' },
     { to: '/disputes', label: 'Disputas', show: user?.role === 'moderator' || user?.role === 'admin' },
     { to: '/audit', label: 'Auditoría', show: user?.role === 'admin' },
   ].filter(n => n.show);
@@ -180,8 +181,11 @@ function AppHeader({ user, onLogout }) {
               <span className="lm-badge lm-badge--primary" style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--text-xs)' }}>
                 {user.username} · {user.role}
               </span>
+              <NotificationBell />
               <Button variant="ghost" size="sm" onClick={onLogout}>Salir</Button>
-              <Avatar name={user.username} size="md" status="online" />
+              <Link to="/profile" title="Mi perfil" aria-label="Mi perfil">
+                <Avatar name={user.username} size="md" status="online" />
+              </Link>
             </>
           ) : (
             <Link to="/login" className="lm-btn lm-btn--primary lm-btn--sm">Ingresar</Link>
@@ -215,6 +219,7 @@ export default function App() {
           <Route path="/sell" element={user ? <Sell /> : <Navigate to="/login" />} />
           <Route path="/transactions" element={user ? <MyTransactions /> : <Navigate to="/login" />} />
           <Route path="/payments" element={user ? <Payments /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={user ? <Profile user={user} /> : <Navigate to="/login" />} />
           <Route path="/disputes" element={user ? <Disputes user={user} /> : <Navigate to="/login" />} />
           <Route path="/audit" element={user?.role === 'admin' ? <Audit /> : <Navigate to="/" />} />
         </Routes>

@@ -30,9 +30,12 @@ export default function Listings({ user }) {
   const gridRef = useRef(null);
 
   const query = (params.get('q') || '').trim().toLowerCase();
+  const exploreAll = params.get('all') === '1';
   const isSearch = query.length > 0;
-  // En inicio mostramos pocos (vista destacada); en búsqueda, página más grande.
-  const ITEMS_PER_PAGE = isSearch ? 20 : 4;
+  // Vista completa: búsqueda por texto o "Explorar mercado" (todos los productos).
+  const fullView = isSearch || exploreAll;
+  // En inicio mostramos pocos (vista destacada); en vista completa, página grande.
+  const ITEMS_PER_PAGE = fullView ? 20 : 4;
 
   // Modificado para pedir la data paginada y con filtros directamente al servidor
   const load = () => {
@@ -71,10 +74,10 @@ export default function Listings({ user }) {
 
   useEffect(() => {
     load();
-  }, [page, cat, sort, query, minPrice, maxPrice]);
+  }, [page, cat, sort, query, minPrice, maxPrice, exploreAll]);
 
-  // Al cambiar la búsqueda, volver a la primera página.
-  useEffect(() => { setPage(1); }, [query]);
+  // Al cambiar la búsqueda o entrar a "ver todo", volver a la primera página.
+  useEffect(() => { setPage(1); }, [query, exploreAll]);
 
   function buy(id) {
     setError('');
@@ -84,6 +87,14 @@ export default function Listings({ user }) {
         invalidateCache('/transactions');
         navigate('/transactions');
       })
+      .catch((err) => setError(err.message));
+  }
+
+  function del(id) {
+    if (!window.confirm('¿Borrar este listing? No se puede deshacer.')) return;
+    setError('');
+    api(`/listings/${id}`, { method: 'DELETE' })
+      .then(load)
       .catch((err) => setError(err.message));
   }
 
@@ -102,7 +113,7 @@ export default function Listings({ user }) {
 
   return (
     <div className="lmk-screen">
-      {!isSearch && (
+      {!fullView && (
       <section className="lmk-hero">
         <div className="lmk-hero__copy">
           <span className="lmk-eyebrow">
@@ -112,10 +123,10 @@ export default function Listings({ user }) {
           <p>Comprá y vendé entre jugadores con el dinero retenido hasta que ambas partes confirman. Sin sorpresas, sin estafas.</p>
           <div className="lmk-hero__cta">
             <Button variant="primary" size="lg" leftIcon="search"
-              onClick={() => gridRef.current?.scrollIntoView({ behavior: 'smooth' })}>
+              onClick={() => navigate('/?all=1')}>
               Explorar mercado
             </Button>
-            {user?.role === 'seller' && (
+            {user && (
               <Button variant="outline" size="lg" leftIcon="tag" onClick={() => navigate('/sell')}>
                 Vender un item
               </Button>
@@ -237,9 +248,9 @@ export default function Listings({ user }) {
         </div>
       </div>
 
-      {query && (
+      {fullView && (
         <p className="lmk-empty" style={{ textAlign: 'left', padding: 'var(--space-2) 0', color: 'var(--text-muted)' }}>
-          Resultados para “{params.get('q')}” · Total: {totalCount}
+          {query ? `Resultados para “${params.get('q')}”` : 'Todos los productos'} · Total: {totalCount}
         </p>
       )}
 
@@ -264,6 +275,8 @@ export default function Listings({ user }) {
                 sellerMasked={l.seller_email_masked}
                 buyable={!!(user && user.username !== l.seller_username)}
                 onBuy={(e) => { e.stopPropagation(); buy(l.id); }}
+                owned={!!(user && user.username === l.seller_username)}
+                onDelete={(e) => { e.stopPropagation(); del(l.id); }}
                 onClick={() => navigate(`/listing/${l.id}`)}
               />
             ))}

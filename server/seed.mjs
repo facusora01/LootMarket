@@ -48,7 +48,7 @@ async function main() {
   for (const s of sellers) {
     await client.query(
       `INSERT INTO users (username, email, password_hash, role)
-       VALUES ($1, $2, crypt('password123', gen_salt('bf', 10)), 'seller')
+       VALUES ($1, $2, crypt('password123', gen_salt('bf', 10)), 'user')
        ON CONFLICT (username) DO NOTHING`,
       [s.username, s.email]
     );
@@ -78,7 +78,76 @@ async function main() {
     if (res.rowCount > 0) inserted++; else skipped++;
   }
 
-  console.log(`\nSeed OK -> insertados: ${inserted} | ya existian: ${skipped} | vendedores: ${sellers.length}`);
+  console.log(`\nListings -> insertados: ${inserted} | ya existian: ${skipped} | vendedores: ${sellers.length}`);
+
+  // 5) Datos de demo del comprador: medios de pago (TP4 TDE) + trades en varios
+  //    estados del escrow. Mismo key simetrico que la API (db.js).
+  const PAYMENT_KEY = process.env.PAYMENT_KEY || 'tde_demo_key_change_me';
+
+  // 5a) Tarjetas cifradas en reposo. Idempotente por (user, last4).
+  const cards = [
+    { username: 'ana_buyer',   number: '4539115678901234' },
+    { username: 'ana_buyer',   number: '5500005555558888' },
+    { username: 'carla_sells', number: '4000123412341234' },
+  ];
+  let cardsAdded = 0;
+  for (const c of cards) {
+    const r = await client.query(
+      `INSERT INTO payment_methods (user_id, card_encrypted, card_last4)
+       SELECT u.id, pgp_sym_encrypt($2, $3), right($2, 4)
+       FROM users u
+       WHERE u.username = $1
+         AND NOT EXISTS (
+           SELECT 1 FROM payment_methods pm
+           WHERE pm.user_id = u.id AND pm.card_last4 = right($2, 4)
+         )`,
+      [c.username, c.number, PAYMENT_KEY]
+    );
+    cardsAdded += r.rowCount;
+  }
+
+  // 5b) Trades de ana_buyer en distintos estados (ademas del #1 disputado de 04_seed).
+  //     Referencia por titulo (deterministico). Idempotente: salta si ana ya
+  //     tiene una tx sobre ese listing.
+  const trades = [
+    { title: 'Cuenta Valorant Inmortal 3 — 40 skins', status: 'escrow_held',      listingStatus: 'in_escrow' },
+    { title: 'AWP Dragon Lore (Field-Tested)',        status: 'item_transferred', listingStatus: 'in_escrow' },
+    { title: 'Key Elden Ring Deluxe (Steam Global)',  status: 'released',         listingStatus: 'sold' },
+  ];
+  let tradesAdded = 0;
+  for (const t of trades) {
+    const ins = await client.query(
+      `INSERT INTO transactions (listing_id, buyer_id, seller_id, amount, status)
+       SELECT l.id, b.id, l.seller_id, l.price, $2::tx_status
+       FROM listings l
+       CROSS JOIN (SELECT id FROM users WHERE username = 'ana_buyer') b
+       WHERE l.title = $1
+         AND NOT EXISTS (
+           SELECT 1 FROM transactions x WHERE x.listing_id = l.id AND x.buyer_id = b.id
+         )
+       RETURNING id, listing_id`,
+      [t.title, t.status]
+    );
+    if (ins.rowCount > 0) {
+      tradesAdded++;
+      await client.query(
+        `UPDATE listings SET status = $2::listing_status, updated_at = now() WHERE id = $1`,
+        [ins.rows[0].listing_id, t.listingStatus]
+      );
+      // item ya entregado -> rastro auditable (TP7)
+      if (t.status === 'item_transferred' || t.status === 'released') {
+        await client.query(
+          `INSERT INTO item_transfers (transaction_id, transferred_by, note)
+           SELECT tx.id, l.seller_id, 'Entrega seed demo'
+           FROM transactions tx JOIN listings l ON l.id = tx.listing_id
+           WHERE tx.id = $1`,
+          [ins.rows[0].id]
+        );
+      }
+    }
+  }
+
+  console.log(`Demo comprador -> tarjetas nuevas: ${cardsAdded} | trades nuevos: ${tradesAdded}`);
   await client.end();
 }
 

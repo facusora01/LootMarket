@@ -1,7 +1,6 @@
--- TP7: Forensia. Trigger generico que captura before/after image (como la Before
--- Image del transaction log de SQL Server, pero materializada en tabla consultable).
--- Registra quien (app.user_id), que (op + imagenes), cuando (timestamp).
+-- Auditoria (TP7)
 
+-- Trigger generico: captura actor, operacion y before/after image
 CREATE OR REPLACE FUNCTION fn_audit() RETURNS trigger AS $$
 DECLARE
     v_actor TEXT := current_setting('app.user_id', true);
@@ -26,9 +25,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Tablas criticas para el caso forense: listado, transaccion, transferencia,
--- disputa y elevaciones JIT. Cubre "quien listo, quien compro, si se transfirio,
--- y si hubo modificacion posterior de precio o estado".
+-- Triggers sobre tablas criticas
 CREATE TRIGGER trg_audit_listings
     AFTER INSERT OR UPDATE OR DELETE ON listings
     FOR EACH ROW EXECUTE FUNCTION fn_audit();
@@ -49,7 +46,7 @@ CREATE TRIGGER trg_audit_jit_grants
     AFTER INSERT OR UPDATE OR DELETE ON jit_grants
     FOR EACH ROW EXECUTE FUNCTION fn_audit();
 
--- Log forense append-only: nadie (ni admin de la app) puede reescribir la historia.
+-- Append-only: bloquea UPDATE/DELETE sobre audit_log
 CREATE OR REPLACE FUNCTION fn_audit_immutable() RETURNS trigger AS $$
 BEGIN
     RAISE EXCEPTION 'audit_log es append-only';

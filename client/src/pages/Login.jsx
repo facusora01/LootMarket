@@ -8,7 +8,7 @@ import { Select } from '../components/Select.jsx';
 
 export default function Login({ onAuth }) {
   const [mode, setMode] = useState('login');
-  const [form, setForm] = useState({ username: '', email: '', password: '', role: 'buyer' });
+  const [form, setForm] = useState({ username: '', email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -59,10 +59,9 @@ export default function Login({ onAuth }) {
           {mode === 'register' && (
             <>
               <Input label="Email" icon="mail" type="email" placeholder="ana@mail.com" value={form.email} onChange={set('email')} required />
-              <Select label="Rol" value={form.role} onChange={set('role')}>
-                <option value="buyer">Comprador</option>
-                <option value="seller">Vendedor</option>
-              </Select>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', margin: 0 }}>
+                Tu cuenta puede comprar y vender. Sin elegir rol.
+              </p>
             </>
           )}
 

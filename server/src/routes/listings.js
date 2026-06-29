@@ -68,6 +68,13 @@ listingRoutes.get('/', async (req, res, next) => {
   }
 });
 
+// Mis publicaciones (perfil): todos los estados, no solo 'active'. RLS deja al
+// dueno ver sus propios listings (p_listings_select: seller_id = app_user_id()).
+listingRoutes.get('/mine', authenticate, async (req, res, next) => {
+  try { res.json(await listingRepository.findMine(req.user)); }
+  catch (err) { next(err); }
+});
+
 listingRoutes.get('/:id', async (req, res, next) => {
   try {
     const listing = await listingRepository.findPublicById(req.params.id);
@@ -76,7 +83,7 @@ listingRoutes.get('/:id', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-listingRoutes.post('/', authenticate, requireRole('seller', 'admin'), async (req, res, next) => {
+listingRoutes.post('/', authenticate, requireRole('user', 'admin'), async (req, res, next) => {
   try {
     const { title, category, description, price } = req.body;
     if (!title || !category || !price) {
@@ -87,10 +94,22 @@ listingRoutes.post('/', authenticate, requireRole('seller', 'admin'), async (req
   } catch (err) { next(err); }
 });
 
-listingRoutes.patch('/:id/price', authenticate, requireRole('seller'), async (req, res, next) => {
+listingRoutes.patch('/:id/price', authenticate, requireRole('user', 'admin'), async (req, res, next) => {
   try {
     const updated = await listingRepository.updatePrice(req.user, req.params.id, req.body.price);
     if (!updated) return res.status(404).json({ error: 'Listing no encontrado o no editable' });
     res.json(updated);
   } catch (err) { next(err); }
+});
+
+listingRoutes.delete('/:id', authenticate, requireRole('user', 'admin'), async (req, res, next) => {
+  try {
+    const deleted = await listingRepository.remove(req.user, req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Listing no encontrado, no es tuyo o no está activo' });
+    res.json({ ok: true, id: deleted.id });
+  } catch (err) {
+    // FK: un listing con transaccion asociada no se borra (no debería pasar con status='active')
+    if (err.code === '23503') return res.status(409).json({ error: 'El listing tiene transacciones asociadas' });
+    next(err);
+  }
 });

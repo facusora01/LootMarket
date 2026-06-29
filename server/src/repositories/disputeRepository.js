@@ -1,4 +1,5 @@
 import { withUserContext } from '../db.js';
+import { notificationRepository } from './notificationRepository.js';
 
 export const disputeRepository = {
   // Participante abre disputa: la transaccion pasa a 'disputed'
@@ -8,15 +9,21 @@ export const disputeRepository = {
         `UPDATE transactions SET status = 'disputed', updated_at = now()
          WHERE id = $1 AND (buyer_id = $2 OR seller_id = $2)
            AND status IN ('escrow_held', 'item_transferred')
-         RETURNING id`,
+         RETURNING id, buyer_id, seller_id, listing_id`,
         [txId, user.id]
       );
       if (!trows[0]) return null;
+      const t = trows[0];
       const { rows } = await client.query(
         `INSERT INTO disputes (transaction_id, opened_by, reason, private_account_data)
          VALUES ($1, $2, $3, $4) RETURNING id, transaction_id, status, created_at`,
         [txId, user.id, reason, privateAccountData || '']
       );
+      // Notificar a la contraparte (el que no abrio la disputa).
+      const counterparty = user.id === t.buyer_id ? t.seller_id : t.buyer_id;
+      const { rows: lr } = await client.query('SELECT title FROM listings WHERE id = $1', [t.listing_id]);
+      await notificationRepository.notify(client, counterparty, 'dispute_opened',
+        `Se abrió una disputa en «${lr[0]?.title || 'una transacción'}». Un moderador la revisará.`, '/transactions');
       return rows[0];
     });
   },
@@ -83,10 +90,19 @@ export const disputeRepository = {
         [newStatus, user.id, resolution, disputeId]
       );
       if (!rows[0]) return null;
-      await client.query(
-        `UPDATE transactions SET status = $1, updated_at = now() WHERE id = $2`,
+      const { rows: trows } = await client.query(
+        `UPDATE transactions SET status = $1, updated_at = now() WHERE id = $2
+         RETURNING buyer_id, seller_id, listing_id`,
         [txStatus, rows[0].transaction_id]
       );
+      const t = trows[0];
+      const { rows: lr } = await client.query('SELECT title FROM listings WHERE id = $1', [t.listing_id]);
+      const title = lr[0]?.title || 'la transacción';
+      const verdict = winner === 'buyer' ? 'a favor del comprador (reembolso)' : 'a favor del vendedor (pago liberado)';
+      for (const uid of [t.buyer_id, t.seller_id]) {
+        await notificationRepository.notify(client, uid, 'dispute_resolved',
+          `Disputa de «${title}» resuelta ${verdict}.`, '/transactions');
+      }
       return rows[0];
     });
   },

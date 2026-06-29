@@ -6,6 +6,7 @@ import { transactionRoutes } from './routes/transactions.js';
 import { disputeRoutes } from './routes/disputes.js';
 import { adminRoutes } from './routes/admin.js';
 import { paymentRoutes } from './routes/payments.js';
+import { notificationRoutes } from './routes/notifications.js';
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/disputes', disputeRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payment-methods', paymentRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Errores: nunca filtrar detalles internos del motor al cliente (TP5: defensa en profundidad)
 app.use((err, _req, res, _next) => {

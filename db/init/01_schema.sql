@@ -1,24 +1,25 @@
--- LootMarket schema
--- TP4: pgcrypto para hashing de contraseñas y cifrado de datos de pago
+-- Schema
+
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE user_role AS ENUM ('buyer', 'seller', 'moderator', 'admin');
+-- Tipos
+CREATE TYPE user_role AS ENUM ('user', 'moderator', 'admin');
 CREATE TYPE listing_category AS ENUM ('account', 'skin', 'item', 'key');
 CREATE TYPE listing_status AS ENUM ('active', 'in_escrow', 'sold', 'removed');
 CREATE TYPE tx_status AS ENUM ('escrow_held', 'item_transferred', 'released', 'refunded', 'disputed');
 CREATE TYPE dispute_status AS ENUM ('open', 'resolved_buyer', 'resolved_seller');
 
+-- Usuarios
 CREATE TABLE users (
     id            SERIAL PRIMARY KEY,
     username      VARCHAR(50) UNIQUE NOT NULL,
     email         TEXT UNIQUE NOT NULL,
-    -- TP4: nunca texto plano; crypt() + gen_salt('bf') via pgcrypto
     password_hash TEXT NOT NULL,
-    role          user_role NOT NULL DEFAULT 'buyer',
+    role          user_role NOT NULL DEFAULT 'user',
     created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- TP4: tokens de sesion guardados hasheados (sha256), nunca el token en claro
+-- Sesiones
 CREATE TABLE sessions (
     id         SERIAL PRIMARY KEY,
     user_id    INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -27,6 +28,7 @@ CREATE TABLE sessions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Listings
 CREATE TABLE listings (
     id          SERIAL PRIMARY KEY,
     seller_id   INT NOT NULL REFERENCES users(id),
@@ -40,7 +42,7 @@ CREATE TABLE listings (
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Escrow: el dinero queda retenido hasta confirmacion del comprador o resolucion de disputa
+-- Transacciones (escrow)
 CREATE TABLE transactions (
     id         SERIAL PRIMARY KEY,
     listing_id INT NOT NULL REFERENCES listings(id),
@@ -52,7 +54,7 @@ CREATE TABLE transactions (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- TP7: cada transferencia de item es un hecho auditable independiente
+-- Transferencias de item
 CREATE TABLE item_transfers (
     id             SERIAL PRIMARY KEY,
     transaction_id INT NOT NULL REFERENCES transactions(id),
@@ -61,8 +63,7 @@ CREATE TABLE item_transfers (
     note           TEXT NOT NULL DEFAULT ''
 );
 
--- TP4: datos de pago cifrados en reposo (pgp_sym_encrypt ~ TDE a nivel columna,
--- vanilla Postgres no trae TDE nativo / pg_tde)
+-- Medios de pago (cifrados en reposo)
 CREATE TABLE payment_methods (
     id             SERIAL PRIMARY KEY,
     user_id        INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -71,12 +72,12 @@ CREATE TABLE payment_methods (
     created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Disputas
 CREATE TABLE disputes (
     id             SERIAL PRIMARY KEY,
     transaction_id INT UNIQUE NOT NULL REFERENCES transactions(id),
     opened_by      INT NOT NULL REFERENCES users(id),
     reason         TEXT NOT NULL,
-    -- datos privados de la cuenta en disputa: solo visibles con grant JIT activo (TP8)
     private_account_data TEXT NOT NULL DEFAULT '',
     status         dispute_status NOT NULL DEFAULT 'open',
     moderator_id   INT REFERENCES users(id),
@@ -85,8 +86,7 @@ CREATE TABLE disputes (
     resolved_at    TIMESTAMPTZ
 );
 
--- TP8: privilegios Just-In-Time para moderadores. Acceso temporal, acotado a una
--- disputa, con expiracion automatica y motivo declarado.
+-- Grants JIT (TP8)
 CREATE TABLE jit_grants (
     id           SERIAL PRIMARY KEY,
     moderator_id INT NOT NULL REFERENCES users(id),
@@ -97,18 +97,31 @@ CREATE TABLE jit_grants (
     revoked      BOOLEAN NOT NULL DEFAULT false
 );
 
--- TP7: log forense append-only con before/after image de cada operacion
+-- Log de auditoria (append-only, TP7)
 CREATE TABLE audit_log (
     id         BIGSERIAL PRIMARY KEY,
     table_name TEXT NOT NULL,
-    operation  TEXT NOT NULL,            -- INSERT / UPDATE / DELETE
+    operation  TEXT NOT NULL,
     row_id     INT,
-    actor_id   TEXT,                     -- app.user_id seteado por la API por request
-    before_img JSONB,                    -- imagen previa (clave para forensia, cf. TP7)
+    actor_id   TEXT,
+    before_img JSONB,
     after_img  JSONB,
     at         TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Notificaciones
+CREATE TABLE notifications (
+    id         SERIAL PRIMARY KEY,
+    user_id    INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    kind       TEXT NOT NULL,
+    message    TEXT NOT NULL,
+    link       TEXT,
+    read       BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Indices
+CREATE INDEX idx_notif_user_unread ON notifications(user_id, read);
 CREATE INDEX idx_listings_status ON listings(status);
 -- LM-58: composite indexes for listing filtering + sorting
 CREATE INDEX idx_listings_cat_created ON listings(status, category, created_at DESC);
