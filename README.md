@@ -23,7 +23,7 @@ docker compose up -d
 
 # 2. API
 cd server
-cp .env.example .env   # y completá PAYMENT_KEY (clave de cifrado de pagos)
+cp .env.example .env   # completá PAYMENT_KEY; PGPASSWORD debe ser igual al APP_DB_PASSWORD del paso 1
 npm install
 npm run dev        # http://localhost:3001
 
@@ -33,9 +33,44 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-En Windows alcanza con `.\start.ps1` (levanta DB + API + cliente).
+No hace falta el paso manual: cada entorno genera los `.env` con secretos al azar y
+consistentes.
 
-**Tests de integración** (26 casos de uso, requiere la app corriendo):
+Un solo comando que levanta DB + API + cliente (Ctrl+C frena todo):
+
+```powershell
+.\start.ps1            # Windows   (-Reset recrea la DB; -NoLogs en segundo plano)
+```
+```bash
+./startLinux.sh        # Linux/Mac (--reset recrea la DB; --no-logs en segundo plano)
+```
+
+**Linux/Mac, alternativa con `make`** (targets compuestos, ver `make help`):
+
+```bash
+make install   # una vez: deps de server y client
+make up        # genera .env + levanta la DB (schema, RLS y cuentas demo)
+make seed      # catálogo completo (~100 listings con imágenes; opcional)
+make api       # API en :3001  (en una terminal; Ctrl+C frena)
+make web       # cliente en :5173 (en otra terminal; Ctrl+C frena)
+make test      # suite de integración m9
+make down      # frena la DB (mantiene datos)  ·  make reset = recrear desde cero
+```
+
+> `startLinux.sh` es el equivalente a `start.ps1`: cómodo, todo en uno. `make` es la vía
+> granular — al correr los dev-servers en foreground (`make api` / `make web`), frenarlos
+> es un `Ctrl+C` nativo, sin depender de rastrear PIDs ni de `lsof`.
+
+### Datos de ejemplo (dos seeds distintos)
+
+- **Automático**: al inicializar la DB por primera vez (volumen vacío), Postgres corre
+  los scripts de `db/init/` — incluido `04_seed.sql`, que carga las **cuentas demo** (ver
+  tabla abajo) y unos pocos listings base. No requiere ningún paso extra: `docker compose
+  up -d` (o `.\start.ps1`) ya los crea.
+- **Manual**: el catálogo completo (~100 listings con imágenes) lo carga `server/seed.mjs`,
+  que **no** corre solo. Ejecutá `.\seed.ps1` (o `node server/seed.mjs`) con la DB levantada.
+
+**Tests de integración** (29 checks, requiere la app corriendo):
 
 ```bash
 node server/tests/m9.mjs

@@ -4,3 +4,6 @@
 # Los scripts de init de la DB corren en el contenedor Linux: forzar LF siempre
 # (con CRLF el shebang y el heredoc fallan).
 *.sh text eol=lf
+
+# El Makefile debe usar LF (CRLF rompe el parser de make en Linux).
+Makefile text eol=lf

@@ -54,7 +54,7 @@ export default function Login({ onAuth }) {
           <h1>{mode === 'login' ? 'Entrá a tu cuenta' : 'Crear cuenta'}</h1>
           <p>{mode === 'login' ? 'Comprá y vendé items con protección de escrow.' : 'Unite al mercado peer-to-peer más seguro.'}</p>
 
-          <Input label="Usuario" icon="user" placeholder="ana_buyer" value={form.username} onChange={set('username')} required />
+          <Input label="Usuario" icon="user" placeholder="tu usuario" value={form.username} onChange={set('username')} required />
 
           {mode === 'register' && (
             <>
@@ -78,10 +78,6 @@ export default function Login({ onAuth }) {
             <a href="#" onClick={(e) => { e.preventDefault(); setMode(mode === 'login' ? 'register' : 'login'); }}>
               {mode === 'login' ? 'Registrate gratis' : 'Iniciá sesión'}
             </a>
-          </div>
-
-          <div style={{ padding: 'var(--space-3)', background: 'var(--surface-overlay)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--text-xs)', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-            Demo — pass <strong style={{ color: 'var(--text-secondary)' }}>password123</strong>: ana_buyer · carla_sells · mod_mati · admin_root
           </div>
         </form>
       </div>

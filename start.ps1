@@ -64,27 +64,35 @@ if (-not $?) {
 # 1b. Secretos en .env (no versionados). ISO 27001 A.5.17/A.8.24: ningun secreto
 #     vive en el codigo. .env raiz -> docker compose; server\.env -> API.
 #     La password de la DB se comparte: APP_DB_PASSWORD (raiz) == PGPASSWORD (server).
+#     Se (re)generan si faltan O si el valor esta vacio (ej: copiar el .env.example).
 function New-Hex([int]$chars) { -join ((1..$chars) | ForEach-Object { '{0:x}' -f (Get-Random -Max 16) }) }
+function Get-EnvVal($file, $key) {
+    if (-not (Test-Path $file)) { return '' }
+    $line = Get-Content $file | Where-Object { $_ -match "^$key=" } | Select-Object -First 1
+    if ($line) { return ($line -replace "^$key=", '').Trim() } else { return '' }
+}
 $rootEnv = "$root\.env"
 $serverEnv = "$root\server\.env"
 
-if (-not (Test-Path $rootEnv)) {
+$appPass = Get-EnvVal $rootEnv 'APP_DB_PASSWORD'
+$rootRegen = $false
+if (-not $appPass) {
     Write-Host "==> Generando .env raiz (passwords de la DB al azar)..." -ForegroundColor Cyan
     $appPass = New-Hex 48
     @(
         "POSTGRES_PASSWORD=$(New-Hex 48)"
         "APP_DB_PASSWORD=$appPass"
     ) | Set-Content -Path $rootEnv -Encoding ascii
+    $rootRegen = $true
     Write-Host "    .env raiz creado (no se versiona)." -ForegroundColor Green
-} else {
-    $line = Get-Content $rootEnv | Where-Object { $_ -match '^APP_DB_PASSWORD=' } | Select-Object -First 1
-    $appPass = ($line -replace '^APP_DB_PASSWORD=', '').Trim()
 }
 
-if (-not (Test-Path $serverEnv)) {
+if ($rootRegen -or -not (Get-EnvVal $serverEnv 'PAYMENT_KEY') -or -not (Get-EnvVal $serverEnv 'PGPASSWORD')) {
     Write-Host "==> Generando server\.env (PAYMENT_KEY + PGPASSWORD)..." -ForegroundColor Cyan
+    $payKey = Get-EnvVal $serverEnv 'PAYMENT_KEY'
+    if (-not $payKey) { $payKey = New-Hex 64 }
     @(
-        "PAYMENT_KEY=$(New-Hex 64)"
+        "PAYMENT_KEY=$payKey"
         "PGPASSWORD=$appPass"
         "CORS_ORIGIN=http://localhost:5173"
     ) | Set-Content -Path $serverEnv -Encoding ascii
