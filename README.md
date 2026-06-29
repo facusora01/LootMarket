@@ -6,7 +6,7 @@
 |---|---|
 | Facundo Sorasio | 108882 |
 | Mateo Sparta | 109418 |
-| Tomas Ruiz | [Agregar Aquí] |
+| Tomas Ruiz | 106904 |
 | Jose Zerpa | 110698 |
 | Rodrigo Vargas | 97076 |
 
