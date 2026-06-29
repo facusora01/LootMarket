@@ -21,7 +21,7 @@ export const userRepository = {
   // Login: crypt(input, hash_guardado) == hash_guardado
   async verifyCredentials(username, password) {
     const { rows } = await pool.query(
-      `SELECT id, username, email, role
+      `SELECT id, username, email, role, created_at
        FROM users
        WHERE username = $1 AND password_hash = crypt($2, password_hash)`,
       [username, password]
@@ -42,7 +42,7 @@ export const userRepository = {
 
   async findBySessionToken(token) {
     const { rows } = await pool.query(
-      `SELECT u.id, u.username, u.email, u.role
+      `SELECT u.id, u.username, u.email, u.role, u.created_at
        FROM sessions s JOIN users u ON u.id = s.user_id
        WHERE s.token_hash = $1 AND s.expires_at > now()`,
       [sha256(token)]

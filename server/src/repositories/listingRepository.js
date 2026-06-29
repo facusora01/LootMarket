@@ -64,6 +64,20 @@ export const listingRepository = {
     };
   },
 
+  // Mis publicaciones para gestionar (perfil): todos los estados. RLS acota al dueno.
+  async findMine(user) {
+    return withUserContext(user, async (client) => {
+      const { rows } = await client.query(
+        `SELECT id, title, category, description, price, status, image_url, created_at, updated_at
+         FROM listings
+         WHERE seller_id = $1
+         ORDER BY created_at DESC`,
+        [user.id]
+      );
+      return rows;
+    });
+  },
+
   async findPublicById(id) {
     const { rows } = await pool.query(
       'SELECT * FROM v_listings_public WHERE id = $1',
@@ -91,6 +105,22 @@ export const listingRepository = {
          WHERE id = $2 AND seller_id = $3 AND status = 'active'
          RETURNING *`,
         [price, listingId, user.id]
+      );
+      return rows[0] || null;
+    });
+  },
+
+  // Baja de un listing propio aun 'active' (sin compras en curso). La policy RLS
+  // p_listings_delete exige seller_id propio o admin; el trigger audita el DELETE
+  // con before image (TP7). Solo 'active': in_escrow/sold tienen una transaccion
+  // asociada (FK) y no deben borrarse.
+  async remove(user, listingId) {
+    return withUserContext(user, async (client) => {
+      const { rows } = await client.query(
+        `DELETE FROM listings
+         WHERE id = $1 AND status = 'active' AND (seller_id = $2 OR $3 = 'admin')
+         RETURNING id`,
+        [listingId, user.id, user.role]
       );
       return rows[0] || null;
     });

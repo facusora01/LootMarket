@@ -13,7 +13,8 @@ const CATEGORIES = {
 
 export function ListingCard({
   title, description, category = 'item', rarity, price, currency = '$', imageUrl,
-  sellerName, sellerMasked, sellerAvatar, buyable = true, onBuy, className = '', ...rest
+  sellerName, sellerMasked, sellerAvatar, buyable = true, onBuy,
+  owned = false, onDelete, className = '', ...rest
 }) {
   const cat = CATEGORIES[category] || CATEGORIES.item;
   const tint = rarity ? `var(--rarity-${rarity})` : cat.tint;
@@ -58,7 +59,9 @@ export function ListingCard({
       </div>
       <div className="lm-listing__foot">
         <PriceTag amount={price} currency={currency} size="md" />
-        {buyable && (
+        {owned ? (
+          <Button variant="danger" size="sm" leftIcon="trash-2" onClick={onDelete}>Borrar</Button>
+        ) : buyable && (
           <Button variant="primary" size="sm" leftIcon="lock" onClick={onBuy}>Comprar</Button>
         )}
       </div>

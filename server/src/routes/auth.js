@@ -6,7 +6,7 @@ export const authRoutes = Router();
 
 authRoutes.post('/register', async (req, res, next) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'Todos los campos son requeridos (usuario, email y contraseña)' });
     }
@@ -30,14 +30,13 @@ authRoutes.post('/register', async (req, res, next) => {
       return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
-    // Solo buyer/seller via registro publico; moderador y admin se crean por seed/admin
-    const safeRole = ['buyer', 'seller'].includes(role) ? role : 'buyer';
-    
-    const user = await userRepository.create({ 
-      username: trimmedUsername, 
-      email: trimmedEmail, 
-      password, 
-      role: safeRole 
+    // Registro publico crea siempre cuenta 'user' (compra y vende).
+    // moderador/admin se crean por seed/admin, nunca por signup.
+    const user = await userRepository.create({
+      username: trimmedUsername,
+      email: trimmedEmail,
+      password,
+      role: 'user',
     });
     
     const token = await userRepository.createSession(user.id);

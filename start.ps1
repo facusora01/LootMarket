@@ -15,7 +15,9 @@ function Stop-LootMarket {
         foreach ($procId in Get-Content "$root\.pids") {
             if ($procId -match '^\d+$') {
                 # /T mata el arbol completo (cmd -> npm -> node/vite)
-                taskkill /PID $procId /T /F *> $null
+                # Redireccion dentro de cmd: evita que PS 5.1 trate el stderr
+                # de un PID inexistente como error terminante (ErrorAction Stop).
+                cmd /c "taskkill /PID $procId /T /F >nul 2>nul"
             }
         }
         Remove-Item "$root\.pids" -Force -ErrorAction SilentlyContinue
@@ -24,7 +26,7 @@ function Stop-LootMarket {
     # Por las dudas: liberar puertos si quedaron procesos huerfanos.
     $conns = Get-NetTCPConnection -LocalPort 3001, 5173 -State Listen -ErrorAction SilentlyContinue
     foreach ($c in $conns) {
-        taskkill /PID $c.OwningProcess /T /F *> $null
+        cmd /c "taskkill /PID $($c.OwningProcess) /T /F >nul 2>nul"
     }
 
     if ($IncludeDb) {
