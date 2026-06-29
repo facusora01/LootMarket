@@ -55,6 +55,25 @@ Un solo comando que levanta DB + API + cliente (Ctrl+C frena todo):
 ./startLinux.sh        # Linux/Mac (--reset recrea la DB; --no-logs en segundo plano)
 ```
 
+> **Windows — error "is not digitally signed" / "cannot be loaded":** la
+> ExecutionPolicy bloquea scripts sin firma. Son **dos cosas** y suelen darse juntas
+> al bajar el repo por OneDrive o internet:
+>
+> 1. **Policy restrictiva.** Permitir scripts locales para tu usuario, una sola vez:
+>    ```powershell
+>    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+>    ```
+> 2. **Mark-of-the-web.** Si tras el paso 1 sigue el error, los `.ps1` están marcados
+>    como "zona internet" y `RemoteSigned` les exige firma. Quitá la marca:
+>    ```powershell
+>    Get-ChildItem -Recurse -Filter *.ps1 | Unblock-File
+>    ```
+>
+> Alternativa sin tocar policy ni marcas — correr solo ese script:
+> ```powershell
+> powershell -ExecutionPolicy Bypass -File ".\start.ps1"
+> ```
+
 **Linux/Mac, alternativa con `make`** (targets compuestos, ver `make help`):
 
 ```bash
