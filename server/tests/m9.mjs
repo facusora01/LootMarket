@@ -54,6 +54,23 @@ function psqlExpectError(sql, user = 'postgres') {
   }
 }
 
+// Limpia los fixtures que crea el harness (usuarios @test.local y todo lo asociado)
+// para no dejar basura en el catalogo publico. Idempotente, FK-safe, como superuser.
+// Sin DO/$$ (el shell expandiria $$); se encadenan DELETEs en orden de dependencia.
+function cleanupFixtures() {
+  const fix = `(SELECT id FROM users WHERE email LIKE '%@test.local')`;
+  const txs = `(SELECT id FROM transactions WHERE buyer_id IN ${fix} OR seller_id IN ${fix})`;
+  const sql = [
+    `DELETE FROM jit_grants WHERE moderator_id IN ${fix} OR dispute_id IN (SELECT id FROM disputes WHERE transaction_id IN ${txs})`,
+    `DELETE FROM item_transfers WHERE transferred_by IN ${fix} OR transaction_id IN ${txs}`,
+    `DELETE FROM disputes WHERE opened_by IN ${fix} OR moderator_id IN ${fix} OR transaction_id IN ${txs}`,
+    `DELETE FROM transactions WHERE buyer_id IN ${fix} OR seller_id IN ${fix}`,
+    `DELETE FROM listings WHERE seller_id IN ${fix}`,
+    `DELETE FROM users WHERE email LIKE '%@test.local'`, // cascade: sessions, payment_methods, notifications
+  ].join('; ');
+  try { psql(sql); } catch (e) { console.warn('cleanup de fixtures (no critico):', e.message); }
+}
+
 const results = [];
 async function tc(title, tp, fn) {
   try {
@@ -439,7 +456,8 @@ async function main() {
     return 'este harness: 25 casos de uso ejercitados contra API viva + inspección en reposo';
   });
 
-  // ---- reporte ------------------------------------------------------------
+  // ---- limpieza de fixtures + reporte -------------------------------------
+  cleanupFixtures();
   print();
 }
 
@@ -457,4 +475,4 @@ function print() {
   process.exit(n('FAIL') > 0 ? 1 : 0);
 }
 
-main().catch((e) => { console.error('Harness abortó:', e); process.exit(2); });
+main().catch((e) => { console.error('Harness abortó:', e); cleanupFixtures(); process.exit(2); });
