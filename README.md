@@ -5,7 +5,7 @@
 | Integrante | Legajo |
 |---|---|
 | Facundo Sorasio | 108882 |
-| Mateo Sparta | [Agregar Aquí] |
+| Mateo Sparta | 109418 |
 | Tomas Ruiz | [Agregar Aquí] |
 | Jose Zerpa | 110698 |
 | Rodrigo Vargas | 97076 |
