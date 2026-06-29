@@ -3,7 +3,9 @@
 # Ctrl+C frena TODO (API, cliente y DB) y cierra limpio. No hace falta stop.ps1.
 # Si ya hay una instancia corriendo, .\start.ps1 la reinicia.
 # .\start.ps1 -NoLogs  -> arranca en segundo plano y termina sin mostrar logs
-param([switch]$NoLogs)
+# -Reset: dropea el volumen de la DB (down -v) y la recrea desde cero. Necesario
+#   una sola vez si venis de una version con la password vieja en el volumen pgdata.
+param([switch]$NoLogs, [switch]$Reset)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 
@@ -59,9 +61,43 @@ if (-not $?) {
     if (-not $?) { Write-Host "Docker no arranco en 120s. Abortando." -ForegroundColor Red; exit 1 }
 }
 
+# 1b. Secretos en .env (no versionados). ISO 27001 A.5.17/A.8.24: ningun secreto
+#     vive en el codigo. .env raiz -> docker compose; server\.env -> API.
+#     La password de la DB se comparte: APP_DB_PASSWORD (raiz) == PGPASSWORD (server).
+function New-Hex([int]$chars) { -join ((1..$chars) | ForEach-Object { '{0:x}' -f (Get-Random -Max 16) }) }
+$rootEnv = "$root\.env"
+$serverEnv = "$root\server\.env"
+
+if (-not (Test-Path $rootEnv)) {
+    Write-Host "==> Generando .env raiz (passwords de la DB al azar)..." -ForegroundColor Cyan
+    $appPass = New-Hex 48
+    @(
+        "POSTGRES_PASSWORD=$(New-Hex 48)"
+        "APP_DB_PASSWORD=$appPass"
+    ) | Set-Content -Path $rootEnv -Encoding ascii
+    Write-Host "    .env raiz creado (no se versiona)." -ForegroundColor Green
+} else {
+    $line = Get-Content $rootEnv | Where-Object { $_ -match '^APP_DB_PASSWORD=' } | Select-Object -First 1
+    $appPass = ($line -replace '^APP_DB_PASSWORD=', '').Trim()
+}
+
+if (-not (Test-Path $serverEnv)) {
+    Write-Host "==> Generando server\.env (PAYMENT_KEY + PGPASSWORD)..." -ForegroundColor Cyan
+    @(
+        "PAYMENT_KEY=$(New-Hex 64)"
+        "PGPASSWORD=$appPass"
+        "CORS_ORIGIN=http://localhost:5173"
+    ) | Set-Content -Path $serverEnv -Encoding ascii
+    Write-Host "    server\.env creado (no se versiona)." -ForegroundColor Green
+}
+
 # 2. PostgreSQL
-Write-Host "==> Levantando PostgreSQL (docker compose)..." -ForegroundColor Cyan
 Set-Location $root
+if ($Reset) {
+    Write-Host "==> -Reset: dropeando volumen de la DB (down -v)..." -ForegroundColor Yellow
+    docker compose down -v *> $null
+}
+Write-Host "==> Levantando PostgreSQL (docker compose)..." -ForegroundColor Cyan
 docker compose up -d
 if (-not $?) { Write-Host "Fallo docker compose." -ForegroundColor Red; exit 1 }
 

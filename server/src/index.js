@@ -1,3 +1,4 @@
+import './env.js'; // carga server/.env antes que cualquier modulo que lea process.env
 import express from 'express';
 import cors from 'cors';
 import { authRoutes } from './routes/auth.js';
@@ -9,7 +10,31 @@ import { paymentRoutes } from './routes/payments.js';
 import { notificationRoutes } from './routes/notifications.js';
 
 const app = express();
-app.use(cors());
+
+// ISO 27001 A.8.9 (hardening): no revelar el stack del servidor.
+app.disable('x-powered-by');
+
+// ISO 27001 A.8.20/A.8.23 (seguridad de red): CORS restringido a origenes
+// conocidos en vez de '*'. Configurable por env para prod.
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim());
+app.use(cors({
+  origin: (origin, cb) => {
+    // Permitir herramientas sin Origin (curl, tests) y los origenes en allowlist.
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    return cb(new Error('Origen no permitido por CORS'));
+  },
+}));
+
+// ISO 27001 A.8.9: cabeceras de seguridad basicas (sin dependencias extra).
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  next();
+});
+
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

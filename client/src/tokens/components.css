@@ -249,6 +249,11 @@
 .lm-listing__title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-heading); line-height: var(--leading-snug); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lm-listing__desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: var(--text-sm); color: var(--text-muted); line-height: var(--leading-snug); overflow-wrap: break-word; }
 .lm-listing__seller { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--text-muted); margin-top: auto; min-width: 0; }
+/* Avatar, separador e icono de verificado nunca se encogen ni se cortan */
+.lm-listing__seller > :first-child, .lm-listing__seller-check { flex-shrink: 0; }
+/* Nombre y email truncan con ellipsis en vez de desbordar la tarjeta */
+.lm-listing__seller-name, .lm-listing__seller-mask { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lm-listing__seller-mask { font-family: var(--font-mono); }
 .lm-listing__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-4); border-top: var(--border-width) solid var(--border-default); }
 
 /* ---- Tabs -------------------------------------------------------------- */

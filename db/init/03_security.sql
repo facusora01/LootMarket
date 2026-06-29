@@ -14,8 +14,9 @@ SELECT l.id, l.title, l.category, l.description, l.price, l.status,
 FROM listings l
 JOIN users u ON u.id = l.seller_id;
 
--- Rol de minimo privilegio para la API (TP6)
-CREATE ROLE lootmarket_app LOGIN PASSWORD 'app_secret_change_me';
+-- Rol de minimo privilegio para la API (TP6). El rol y su password se crean en
+-- 00_roles.sh desde $APP_DB_PASSWORD (A.5.17: secreto fuera del codigo). Aca solo
+-- se otorgan privilegios.
 GRANT CONNECT ON DATABASE lootmarket TO lootmarket_app;
 GRANT USAGE ON SCHEMA public TO lootmarket_app;
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO lootmarket_app;

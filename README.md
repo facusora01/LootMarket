@@ -18,10 +18,12 @@ escrow, historial de trades auditable y resolución de disputas.
 
 ```bash
 # 1. Base de datos (crea schema, triggers, RLS y datos seed automáticamente)
+cp .env.example .env   # completá POSTGRES_PASSWORD y APP_DB_PASSWORD (secretos, no se versionan)
 docker compose up -d
 
 # 2. API
 cd server
+cp .env.example .env   # y completá PAYMENT_KEY (clave de cifrado de pagos)
 npm install
 npm run dev        # http://localhost:3001
 

@@ -7,19 +7,40 @@
 //       o via ../seed.ps1 / ../seed.sh
 import pg from 'pg';
 import { readFile } from 'fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SEED_FILE = join(__dirname, '..', 'db', 'seed', 'listings.json');
 
+// Carga el .env raiz (A.5.17: el password del superuser no vive en el codigo).
+// Es el mismo POSTGRES_PASSWORD que usa docker-compose para inicializar la DB.
+const ROOT_ENV = join(__dirname, '..', '.env');
+if (existsSync(ROOT_ENV)) {
+  for (const line of readFileSync(ROOT_ENV, 'utf8').split('\n')) {
+    const t = line.trim();
+    if (!t || t.startsWith('#')) continue;
+    const i = t.indexOf('=');
+    if (i === -1) continue;
+    const k = t.slice(0, i).trim();
+    if (process.env[k] === undefined) process.env[k] = t.slice(i + 1).trim();
+  }
+}
+
+const seedPassword = process.env.PGSEEDPASSWORD || process.env.POSTGRES_PASSWORD;
+if (!seedPassword) {
+  console.error('Falta POSTGRES_PASSWORD (o PGSEEDPASSWORD). Configurala en el .env raiz.');
+  process.exit(1);
+}
+
 const client = new pg.Client({
   host: process.env.PGHOST || '127.0.0.1',
   port: Number(process.env.PGPORT || 5432),
   database: process.env.PGDATABASE || 'lootmarket',
-  // superuser para el DDL; override con PGSEEDUSER/PGSEEDPASSWORD si hace falta
+  // superuser para el DDL; toma el password del .env raiz, nunca hardcodeado
   user: process.env.PGSEEDUSER || 'postgres',
-  password: process.env.PGSEEDPASSWORD || 'postgres_admin_change_me',
+  password: seedPassword,
 });
 
 async function main() {

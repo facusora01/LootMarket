@@ -47,12 +47,12 @@ export function ListingCard({
         {description && <p className="lm-listing__desc">{description}</p>}
         <div className="lm-listing__seller">
           <Avatar name={sellerName} size="sm" />
-          <span>{sellerName}</span>
+          <span className="lm-listing__seller-name">{sellerName}</span>
           {sellerMasked && (
             <>
-              <span>·</span>
-              <span style={{ fontFamily: 'var(--font-mono)' }}>{sellerMasked}</span>
-              <Icon name="shield-check" size={13} color="var(--green-500)" />
+              <span aria-hidden="true">·</span>
+              <span className="lm-listing__seller-mask">{sellerMasked}</span>
+              <Icon className="lm-listing__seller-check" name="shield-check" size={13} color="var(--green-500)" />
             </>
           )}
         </div>

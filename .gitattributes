@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Los scripts de init de la DB corren en el contenedor Linux: forzar LF siempre
+# (con CRLF el shebang y el heredoc fallan).
+*.sh text eol=lf

@@ -1,7 +1,8 @@
 // ============================================================================
 // M9 — Testing & Casos de uso. Harness de integración.
 //
-// Ejercita los 26 casos de uso del milestone M9 contra la API viva (:3001)
+// Ejercita los 26 casos de uso del milestone M9 discriptos por 
+// el usuario contra la API viva (:3001)
 // y la BD (psql vía docker), incluyendo casos negativos de seguridad
 // (RLS, DDM, JIT, SQLi, audit append-only, TDE, mínimo privilegio).
 //

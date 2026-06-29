@@ -5,7 +5,11 @@ services:
     environment:
       POSTGRES_DB: lootmarket
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres_admin_change_me
+      # ISO 27001 A.5.17 / A.8.9: passwords desde el .env raiz (gitignored), nunca
+      # en el repo. ':?' hace fallar el arranque si no estan definidas (sin default).
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defini POSTGRES_PASSWORD en el .env raiz}
+      # La toma 00_roles.sh para crear el rol de minimo privilegio de la API.
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?defini APP_DB_PASSWORD en el .env raiz}
     ports:
       # TP6 hardening: bind solo a loopback — equivalente a listen_addresses restringido,
       # la DB no queda expuesta fuera del host.
